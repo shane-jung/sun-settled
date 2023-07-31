@@ -8,7 +8,7 @@ export function SignInButton() {
   if (status === "loading") return <>...</>;
   else if (status === "authenticated")
     return (
-      <div>
+      <div className="flex flex-row items-center px-4">
         <Link href={"/"}>
           <Image
             src={session.user?.image ?? ""}
@@ -23,12 +23,12 @@ export function SignInButton() {
     );
 
   return (
-    <button className="btn btn-secondary " onClick={() => signIn()}>Sign In</button>
+    <button className="btn btn-secondary-outline btn-sm" onClick={() => signIn()}>Sign In</button>
   );
 }
 
 export function SignOutButton() {
   return (
-    <button className="btn btn-secondary" onClick={() => signIn()}>Sign Out</button>
+    <button className="btn btn-secondary-outline btn-sm" onClick={() => signIn()}>Sign Out</button>
   );
 }

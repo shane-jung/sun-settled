@@ -1,13 +1,9 @@
-"use client";
-import { Formik, Form, Field } from "formik";
-import Select from "react-select";
+"use client"
+import GardenSelect from "@/components/GardenSelect"
+import { Garden } from "@/types"
+import { Formik, Form, Field } from "formik"
 
-export default function SubscriberForm({ gardens }: { gardens: any[] }) {
-  const options = gardens.map((garden) => ({
-    label: garden.name,
-    value: garden.id,
-  }));
-
+export default function SubscriberForm({ gardens }: { gardens: Garden[] }) {
   const planOptions = [
     {
       label: "Pay as you go",
@@ -17,77 +13,94 @@ export default function SubscriberForm({ gardens }: { gardens: any[] }) {
       label: "Prepaid",
       value: "PREPAID",
     },
-  ];
+  ]
   return (
     <Formik
       initialValues={{
         name: "",
         email: "",
+        gardenId: "",
+        allocation: "",
+        paymentPlan: "",
       }}
       onSubmit={async (values) => {
-        console.log(values);
+        console.log(values)
         const res = await fetch("/api/subscribers", {
           method: "POST",
           body: JSON.stringify(values),
-        });
-        console.log(res);
+        })
+        console.log(res)
       }}
     >
-      <Form>
-        <h1 className="text-2xl">New Subscriber</h1>
-        <label htmlFor="name" className="label">
-          Subscriber Name
-        </label>
-        <Field
-          id="name"
-          name="name"
-          type="text"
-          required
-          className="input input-bordered"
-        />
+      {(props) => (
+        <Form>
+          <h1 className="text-2xl">New Subscriber</h1>
+          <label htmlFor="name" className="label">
+            Subscriber Name
+          </label>
+          <Field
+            id="name"
+            name="name"
+            type="text"
+            required
+            className="input input-bordered"
+          />
 
-        <label htmlFor="capacityDc" className="label">
-          Email
-        </label>
-        <Field
-          id="email"
-          name="email"
-          type="email"
-          required
-          className="input input-bordered"
-        />
-        {/* 
-        <label htmlFor="gardenId" className="label">
-          Garden
-        </label>
-        <Select
-          id="gardenId"
-          name="gardenId"
-          options={options}
-        /> */}
+          <label htmlFor="capacityDc" className="label">
+            Email
+          </label>
+          <Field
+            id="email"
+            name="email"
+            type="email"
+            required
+            className="input input-bordered"
+          />
 
-        <div>
-          <h2 className="text-xl">Allocation</h2>
-          {[1].map((index) => (
-            <div className="flex flex-row gap-3" key={index}>
-              <Select className="w-64" options={options} />
+          <div>
+            <h2 className="text-xl">Allocation</h2>
+            <div className="flex flex-row gap-3">
+              <GardenSelect
+                gardens={gardens.map((garden) => ({
+                  value: garden.id,
+                  label: garden.name,
+                }))}
+                handleChange={props.handleChange}
+              />
               <label className="input-group">
                 <Field
-                  className="input input-bordered"
+                  id={`allocation`}
+                  name={`allocation`}
+                  className="input input-bordered w-32"
                   type="text"
-                  name={`${index}-kW`}
+                  required
                 />
                 <span>kW DC</span>
               </label>
-              <Select options={planOptions} />
+              <select
+                className="select select-bordered"
+                name="paymentPlan"
+                onChange={props.handleChange}
+                defaultValue={"default"}
+                required
+              >
+                <option value="default" disabled>
+                  Select a Plan
+                </option>
+                {planOptions.map((option, index) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
             </div>
-          ))}
-        </div>
+          </div>
 
-        <button className="btn btn-secondary" type="submit">
-          Save
-        </button>
-      </Form>
+          <button className="btn btn-secondary" type="submit">
+            Save
+          </button>
+        </Form>
+      )}
     </Formik>
-  );
+  )
 }

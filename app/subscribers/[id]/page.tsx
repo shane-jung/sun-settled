@@ -1,24 +1,24 @@
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma"
+import Link from "next/link"
 
 interface Props {
   params: {
-    id: string;
-  };
+    id: string
+  }
 }
 export default async function Page({ params }: Props) {
-  const subscriber = await prisma.subscriber.findUnique({
-    where: {
-      id: params.id,
-    },
-  });
+  const subscriber = await fetch(
+    "http://localhost:3000/api/subscribers?id=" + params.id
+  ).then((res) => res.json())
+  console.log(subscriber)
   return (
-    <div>
+    <div className="pl-4">
       <h2 className="text-3xl">{subscriber?.name}</h2>
       <p>{subscriber?.email}</p>
 
       <div className="overflow-x-auto">
         <h4 className="text-lg">Subscriber Allocation</h4>
-        <table className="table border border-2">
+        <table className="table border">
           <thead>
             <tr className="bg-base-200">
               <th>Garden</th>
@@ -30,17 +30,13 @@ export default async function Page({ params }: Props) {
           </thead>
           <tbody>
             <tr>
-              <td>North High Community Solar Garden</td>
-              <td>5.000 kW</td>
-              <td>Pay As You Go</td>
               <td>
-                <button className="btn btn-ghost btn-xs">details</button>
+                <Link href={`/gardens/${subscriber?.gardenId!}`}>
+                  North High Community Solar Garden
+                </Link>
               </td>
-            </tr>
-            <tr>
-              <td>Emerge Second Chance</td>
-              <td>7.000 kW</td>
-              <td>Pay Up Front</td>
+              <td>{subscriber?.allocation} kW</td>
+              <td>{subscriber?.paymentPlan}</td>
               <td>
                 <button className="btn btn-ghost btn-xs">details</button>
               </td>
@@ -50,14 +46,13 @@ export default async function Page({ params }: Props) {
       </div>
       <div className="overflow-x-auto">
         <h4 className="text-lg">Billing History</h4>
-        <table className="table border border-2">
+        <table className="table border">
           <thead>
             <tr className="bg-base-200">
               <th>Invoice #</th>
               <th>Date</th>
               <th>Amount</th>
               <th>Status</th>
-
             </tr>
           </thead>
           <tbody>
@@ -66,22 +61,18 @@ export default async function Page({ params }: Props) {
               <td>$86.32</td>
               <td>April 21, 2023</td>
 
-              <td>
-                PENDING
-              </td>
+              <td>PENDING</td>
             </tr>
             <tr>
               <td>INV-0000005</td>
               <td>$12.02</td>
               <td>April 14, 2023</td>
 
-              <td>
-                PAID
-              </td>
+              <td>PAID</td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-  );
+  )
 }

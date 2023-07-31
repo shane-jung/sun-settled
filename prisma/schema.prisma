@@ -6,25 +6,26 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 // NextAuth Schema
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
+  id                       String  @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  access_token             String? @db.Text
+  expires_at               Int?
   refresh_token_expires_in Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -42,7 +43,7 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
-  bio           String? @db.Text
+  bio           String?   @db.Text
   age           Int?
   email         String?   @unique
   emailVerified DateTime?
@@ -59,19 +60,65 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
 model Garden {
-  id        String   @id @default(cuid())
+  id          String       @id @default(cuid())
   name        String
-  slug       String   @unique
-  capacityDc  Decimal @default(0)
+  slug        String       @unique
+  capacityDc  Decimal      @default(0)
   description String?
   subscribers Subscriber[] @relation("GardenSubscribers")
+  readings    Reading[]    @relation("GardenProduction")
+  BillingJob  BillingJob[]
+}
+
+model Reading {
+  id                   String   @id @default(cuid())
+  gardenId             String   @default("1")
+  garden               Garden   @relation("GardenProduction", fields: [gardenId], references: [id])
+  production_read_date Int      @default(1)
+  timestamp            DateTime
+  value                Decimal
 }
 
 model Subscriber {
-  id        String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
   email       String
-  gardens     Garden[] @relation("GardenSubscribers")
+  allocation  Decimal   @default(0)
+  paymentPlan String    @default("PAYG")
+  gardenId    String    @default("1")
+  garden      Garden    @relation("GardenSubscribers", fields: [gardenId], references: [id])
+  invoices    Invoice[]
+}
+
+model BillingJob {
+  id           String    @id @default(cuid())
+  gardenId     String    @default("1")
+  status       String    @default("PENDING")
+  garden       Garden    @relation(fields: [gardenId], references: [id])
+  invoices     Invoice[]
+  create_time  DateTime
+  initial_time DateTime
+}
+
+model Invoice {
+  id            String    @id @default(cuid())
+  amount        Decimal
+  due_date      DateTime
+  send_date     DateTime
+  received_date DateTime?
+  subscriberId  String    @default("1")
+  status        String    @default("SCHEDULED")
+  billingJobId  String    @default("1")
+  timestamp     DateTime
+
+  subscriber Subscriber  @relation(fields: [subscriberId], references: [id])
+  billingJob BillingJob? @relation(fields: [billingJobId], references: [id])
+}
+
+model BillingStrategy {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  frequency   String
 }
