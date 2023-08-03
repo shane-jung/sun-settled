@@ -1,3 +1,4 @@
+import Table, { TableBody, TableHeader } from "@/components/Table"
 import { GardenWithRelations } from "@/types"
 
 export default async function Subscribers({
@@ -13,22 +14,22 @@ export default async function Subscribers({
   return (
     <>
       <h2>Subscribers</h2>
-      <table className="table table-lg">
-        <thead>
+      <Table>
+        <TableHeader>
           <tr>
             <th>Subscriber Name</th>
             <th>Allocation (kW)</th>
           </tr>
-        </thead>
-        <tbody>
+        </TableHeader>
+        <TableBody>
           {garden?.subscribers.map((subscriber, index) => (
             <tr key={index}>
               <td>{subscriber.name}</td>
               <td>{subscriber.allocation.toString()}</td>
             </tr>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </>
   )
 }

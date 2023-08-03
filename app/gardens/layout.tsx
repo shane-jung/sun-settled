@@ -1,9 +1,8 @@
 import { Metadata } from "next"
-import Link from "next/link"
 import { Garden } from "@prisma/client"
-import { usePathname } from "next/navigation"
-import GardenList from "../../components/List"
 import List from "../../components/List"
+import { StyledLink } from "@/components/links"
+import { Heading } from "@/components/typography"
 
 export const metadata: Metadata = {
   title: "Community Solar Gardens",
@@ -24,7 +23,7 @@ export default async function Layout({
 
   return (
     <>
-      <h1 className="w-full border-b-2 pb-4 pl-3 text-3xl">Gardens</h1>
+      <Heading className="border-b-2">Gardens</Heading>
 
       <div className="flex gap-4">
         <List
@@ -35,12 +34,12 @@ export default async function Layout({
           }))}
         >
           <div>
-            <Link
-              className="text- mx-auto my-2 block rounded bg-lime-500 px-4 py-2 text-center text-white transition hover:bg-lime-400"
+            <StyledLink
+              className="mx-auto my-2 block rounded bg-lime-500 px-4 py-2 text-center text-white transition hover:bg-lime-400"
               href={"/gardens/create"}
             >
               Add a Garden
-            </Link>
+            </StyledLink>
           </div>
         </List>
 

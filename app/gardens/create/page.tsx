@@ -1,6 +1,7 @@
 "use client"
 
-import { Formik, Form, Field } from "formik"
+import { Formik, Form } from "formik"
+import Field from "@/components/Field"
 
 export default function GardenForm() {
   return (
@@ -11,7 +12,6 @@ export default function GardenForm() {
           capacityDc: "",
         }}
         onSubmit={async (values) => {
-          console.log(values)
           const res = await fetch("/api/gardens", {
             method: "POST",
             body: JSON.stringify(values),
@@ -24,26 +24,20 @@ export default function GardenForm() {
           <label htmlFor="name" className="label">
             Garden Name
           </label>
-          <Field
-            id="name"
-            name="name"
-            type="text"
-            required
-            className="input input-bordered"
-          />
+          <Field name="name" type="text" required />
 
           <label htmlFor="capacityDc" className="label">
             Capacity DC
           </label>
-          <Field
-            id="capacityDc"
-            name="capacityDc"
-            type="text"
-            required
-            className="input input-bordered"
-          />
+          <Field name="capacityDc" type="text" required />
 
-          <button className="btn btn-secondary" type="submit">
+          <button
+            className="btn btn-secondary"
+            type="submit"
+            onClick={() => {
+              console.log("click")
+            }}
+          >
             Save
           </button>
         </Form>

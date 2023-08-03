@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link"
+import { StyledLink } from "@/components/links"
 import { usePathname } from "next/navigation"
 
 const links = [
@@ -9,14 +9,24 @@ const links = [
 ]
 
 export default function NavMenu() {
-  const id = usePathname().split("/")[2]
+  const pathname = usePathname()
+  const id = pathname.split("/")[2]
   return (
-    <ul className="text-md mb-2 flex flex-row gap-12 border-b-2 px-4">
+    <div className="text-md mb-2 flex flex-row border-b-2">
       {links.map((link, index) => (
-        <li key={index} className="p-2">
-          <Link href={`/gardens/${id}/${link.href}`}>{link.label}</Link>
-        </li>
+        <StyledLink
+          className={
+            "p-2 " +
+            (pathname === "/gardens/" + id + "/" + link.href
+              ? "border-b-2 border-slate-700"
+              : "")
+          }
+          key={index}
+          href={`/gardens/${id}/${link.href}`}
+        >
+          {link.label}
+        </StyledLink>
       ))}
-    </ul>
+    </div>
   )
 }

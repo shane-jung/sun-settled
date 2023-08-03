@@ -1,5 +1,7 @@
-import { prisma } from "@/lib/prisma"
-import Link from "next/link"
+import Table, { TableBody, TableHeader } from "@/components/Table"
+import { Link, StyledLink } from "@/components/links"
+import { Heading, SubHeading } from "@/components/typography"
+import { SubscriberWithRelations } from "@/types"
 
 interface Props {
   params: {
@@ -7,71 +9,65 @@ interface Props {
   }
 }
 export default async function Page({ params }: Props) {
-  const subscriber = await fetch(
-    "http://localhost:3000/api/subscribers?id=" + params.id
+  const subscriber: SubscriberWithRelations = await fetch(
+    "http://localhost:3000/api/subscribers?id=" + params.id,
+    { next: { revalidate: 1 } }
   ).then((res) => res.json())
-  console.log(subscriber)
   return (
     <div className="pl-4">
-      <h2 className="text-3xl">{subscriber?.name}</h2>
-      <p>{subscriber?.email}</p>
+      <SubHeading className="text-2xl">{subscriber?.name}</SubHeading>
+      <p className="text-sm">{subscriber?.email}</p>
 
       <div className="overflow-x-auto">
-        <h4 className="text-lg">Subscriber Allocation</h4>
-        <table className="table border">
-          <thead>
-            <tr className="bg-base-200">
+        <SubHeading>Subscriber Allocation</SubHeading>
+        <Table>
+          <TableHeader>
+            <tr>
               <th>Garden</th>
               <th>Allocation</th>
               <th>Plan</th>
-
               <th></th>
             </tr>
-          </thead>
-          <tbody>
+          </TableHeader>
+          <TableBody>
             <tr>
               <td>
                 <Link href={`/gardens/${subscriber?.gardenId!}`}>
                   North High Community Solar Garden
                 </Link>
               </td>
-              <td>{subscriber?.allocation} kW</td>
+              <td>{subscriber?.allocation.toString()} kW</td>
               <td>{subscriber?.paymentPlan}</td>
               <td>
-                <button className="btn btn-ghost btn-xs">details</button>
+                <button className="">Details</button>
               </td>
             </tr>
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
       <div className="overflow-x-auto">
-        <h4 className="text-lg">Billing History</h4>
-        <table className="table border">
-          <thead>
-            <tr className="bg-base-200">
+        <SubHeading>Billing History</SubHeading>
+        <Table>
+          <TableHeader>
+            <tr>
               <th>Invoice #</th>
               <th>Date</th>
               <th>Amount</th>
               <th>Status</th>
             </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>INV-0000001</td>
-              <td>$86.32</td>
-              <td>April 21, 2023</td>
+          </TableHeader>
+          <TableBody>
+            {subscriber.invoices.map((invoice) => (
+              <tr>
+                <td>{invoice.name}</td>
+                <td>$12.02</td>
+                <td>April 14, 2023</td>
 
-              <td>PENDING</td>
-            </tr>
-            <tr>
-              <td>INV-0000005</td>
-              <td>$12.02</td>
-              <td>April 14, 2023</td>
-
-              <td>PAID</td>
-            </tr>
-          </tbody>
-        </table>
+                <td>PAID</td>
+              </tr>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   )

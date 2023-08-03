@@ -16,8 +16,10 @@ export default async function Layout({
   return (
     <div className="w-full">
       <h1 className="mb-1 p-4 text-2xl">{garden?.name}</h1>
-      <NavMenu />
-      <div className="pl-4 pt-2">{children}</div>
+      <div>
+        <NavMenu />
+        <div className="pl-4 pt-2">{children}</div>
+      </div>
     </div>
   )
 }

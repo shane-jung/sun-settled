@@ -26,7 +26,6 @@ export async function GET(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   const data = await request.json()
-  console.log(data)
   return new NextResponse(JSON.stringify(data), {
     headers: {
       "content-type": "application/json",
@@ -43,8 +42,6 @@ export async function PUT(request: NextRequest) {
 export async function POST(request: NextRequest) {
   revalidatePath("http://localhost:3000/api/gardens")
   const data = await request.json()
-  console.log(data)
-
   const garden = await prisma.garden.create({
     data: {
       ...data,

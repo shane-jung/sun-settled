@@ -66,59 +66,72 @@ model Garden {
   slug        String       @unique
   capacityDc  Decimal      @default(0)
   description String?
-  subscribers Subscriber[] @relation("GardenSubscribers")
-  readings    Reading[]    @relation("GardenProduction")
-  BillingJob  BillingJob[]
+  subscribers Subscriber[]
+  readings    Reading[]
+  billingJobs BillingJob[]
 }
 
 model Reading {
   id                   String   @id @default(cuid())
-  gardenId             String   @default("1")
-  garden               Garden   @relation("GardenProduction", fields: [gardenId], references: [id])
+  gardenId             String
+  garden               Garden   @relation(fields: [gardenId], references: [id])
   production_read_date Int      @default(1)
   timestamp            DateTime
   value                Decimal
 }
 
 model Subscriber {
-  id          String    @id @default(cuid())
-  name        String
-  email       String
-  allocation  Decimal   @default(0)
-  paymentPlan String    @default("PAYG")
-  gardenId    String    @default("1")
-  garden      Garden    @relation("GardenSubscribers", fields: [gardenId], references: [id])
-  invoices    Invoice[]
+  id                 String            @id @default(cuid())
+  name               String
+  email              String
+  allocation         Decimal           @default(0)
+  paymentPlan        String            @default("PAYG")
+  gardenId           String            @default("1")
+  garden             Garden            @relation(fields: [gardenId], references: [id])
+  invoices           Invoice[]
+  SubscriptionPlan   SubscriptionPlan? @relation(fields: [subscriptionPlanId], references: [id])
+  subscriptionPlanId String?
 }
 
 model BillingJob {
-  id           String    @id @default(cuid())
-  gardenId     String    @default("1")
-  status       String    @default("PENDING")
-  garden       Garden    @relation(fields: [gardenId], references: [id])
-  invoices     Invoice[]
-  create_time  DateTime
-  initial_time DateTime
+  id                   String           @id @default(cuid())
+  garden_id            String
+  subscription_plan_id String
+  subscription_plan    SubscriptionPlan @relation(fields: [subscription_plan_id], references: [id])
+  garden               Garden           @relation(fields: [garden_id], references: [id])
+  invoices             Invoice[]
+  create_time          DateTime
+  initial_time         DateTime
+  cycles               Int
 }
 
 model Invoice {
-  id            String    @id @default(cuid())
-  amount        Decimal
-  due_date      DateTime
-  send_date     DateTime
-  received_date DateTime?
-  subscriberId  String    @default("1")
-  status        String    @default("SCHEDULED")
-  billingJobId  String    @default("1")
-  timestamp     DateTime
-
-  subscriber Subscriber  @relation(fields: [subscriberId], references: [id])
-  billingJob BillingJob? @relation(fields: [billingJobId], references: [id])
+  id                   String            @id @default(cuid())
+  name                 String
+  amount               Decimal
+  due_date             DateTime
+  send_date            DateTime
+  received_date        DateTime?
+  status               String            @default("SCHEDULED")
+  timestamp            DateTime
+  subscription_plan_id String?
+  billingJobId         String?
+  subscriberId         String?
+  subscriptionPlan     SubscriptionPlan? @relation(fields: [subscription_plan_id], references: [id])
+  billingJob           BillingJob?       @relation(fields: [billingJobId], references: [id])
+  Subscriber           Subscriber?       @relation(fields: [subscriberId], references: [id])
 }
 
-model BillingStrategy {
-  id          String  @id @default(cuid())
-  name        String
-  description String?
-  frequency   String
+model SubscriptionPlan {
+  id                    String       @id @default(cuid())
+  name                  String
+  description           String?
+  billingFrequency      String
+  isShareDependent      Boolean
+  isProductionDependent Boolean
+  rate                  Decimal
+  rateIncrease          Decimal
+  subscribers           Subscriber[]
+  Invoice               Invoice[]
+  BillingJob            BillingJob[]
 }

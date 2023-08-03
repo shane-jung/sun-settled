@@ -1,16 +1,71 @@
 import Link from "next/link"
+import { StyledLink } from "@/components/links"
+import { Heading, SubHeading } from "@/components/typography"
 
 export default function Page() {
   return (
     <div>
-      <h1 className="w-full border-b-2 pb-4 pl-3 text-3xl">Billing</h1>
+      <Heading className="border-b-2">Billing</Heading>
+      <p className="pb-12">
+        Sun Settled simplifies the otherwise complicated process of billing for
+        community solar gardens. We break the process into two pieces:
+      </p>
 
-      <Link
-        className="m-2 block w-60 rounded-md border p-3 transition hover:bg-slate-100"
-        href={"/billing/jobs/create"}
-      >
-        Schedule New Billing Job
-      </Link>
+      <div className="grid grid-cols-2 gap-20 px-32">
+        <div className="border-2">
+          <SubHeading className=" border-b-2 bg-gray-200 py-4 pl-4">
+            Subscription Plans
+          </SubHeading>
+          <div className="p-4">
+            <p className="pb-4">
+              A <span className="font-bold">subscription plan</span> defines how
+              you calculate bills. In particular, each plan will define the rate
+              at which subscribers are billed, and{" "}
+              <span className="italic">how often </span> they are billed. You
+              assign subscription plans to subscribers.
+            </p>
+            <p className="pb-4">
+              For instance, you may have a plan called "Monthly Plan" that bills
+              subscribers $100 per month. You may also have a plan called
+              "Annual Plan" that bills subscribers $1,000 per year.
+            </p>
+
+            <StyledLink
+              className="mx-auto my-2 block w-min whitespace-nowrap rounded-md border bg-indigo-500 p-3 text-white transition hover:bg-indigo-400"
+              href={"/billing/plans"}
+            >
+              Subscription Plans
+            </StyledLink>
+          </div>
+        </div>
+        <div className="border-2">
+          <SubHeading className="border-b-2 bg-gray-200 py-4 pl-4">
+            Billing Jobs
+          </SubHeading>
+          <div className="p-4">
+            <p className="pb-4">
+              A <span className="font-bold">billing job</span> defines{" "}
+              <span className="italic">who</span> is billed,{" "}
+              <span className="italic">when</span> they're billed, and{" "}
+              <span className="italic">for how long</span>. When you create a
+              billing job, you'll specify which subscribers to bill.
+            </p>
+            <p className="pb-4">
+              For example, you may create a billing job that bills all
+              subscribers who belong to your garden called "Garden A", using the
+              "Monthly Plan" subscription plan. You might specify that the
+              billing job should run on the first of each month, and that it
+              should bill subscribers for the next 12 months.
+            </p>
+            <StyledLink
+              className="mx-auto my-2 block w-min whitespace-nowrap rounded-md border bg-indigo-500 p-3 text-white transition hover:bg-indigo-400"
+              href={"/billing/jobs/create"}
+            >
+              Schedule New Billing Job
+            </StyledLink>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

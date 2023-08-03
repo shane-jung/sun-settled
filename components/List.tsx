@@ -1,8 +1,5 @@
 "use client"
-import { Garden } from "@/types"
-
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { StyledLink } from "./links"
 
 export default function List({
   pathName,
@@ -14,17 +11,18 @@ export default function List({
   items: { label: string; id: string }[]
 }) {
   return (
-    <div className="w-80 grid-cols-1">
+    <div className="flex h-full w-80 flex-col ">
       {items.map((item, index) => (
         <div key={index}>
-          <Link
+          <StyledLink
+            key={index}
             href={pathName + item.id}
             className={
-              "my-2 block rounded-lg border-2 px-4 py-2 text-sm transition hover:bg-indigo-400 hover:text-white "
+              "block border px-4 py-4 text-sm transition hover:bg-indigo-500 hover:text-white  "
             }
           >
             {item.label}
-          </Link>
+          </StyledLink>
         </div>
       ))}
       {children}

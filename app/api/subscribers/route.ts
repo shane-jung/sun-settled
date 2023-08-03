@@ -10,6 +10,9 @@ export async function GET(request: NextRequest) {
       where: {
         id: request.nextUrl.searchParams.get("id")!,
       },
+      include: {
+        invoices: true,
+      },
     })
   else subscribers = await prisma.subscriber.findMany()
 

@@ -1,58 +1,64 @@
 "use client"
-import Link from "next/link"
+import { Link, StyledLink } from "@/components/links"
 import { usePathname } from "next/navigation"
+import { HomeIcon, Users, Receipt, Sun, ScrollText } from "lucide-react"
+import { LucideIcon } from "lucide-react"
 
-const navItems = [
+const navItems: {
+  name: string
+  path: string
+  icon: LucideIcon
+  color: string
+}[] = [
   {
     name: "Home",
     path: "/",
+    icon: HomeIcon,
+    color: "text-white-400",
   },
   {
     name: "Community Solar Gardens",
     path: "/gardens",
+    icon: Sun,
+    color: "text-yellow-500",
   },
   {
     name: "Subscribers",
     path: "/subscribers",
+    icon: Users,
+    color: "text-indigo-400",
   },
   {
     name: "Billing",
     path: "/billing",
+    icon: Receipt,
+    color: "text-green-500",
   },
   {
     name: "Invoices",
     path: "/invoices",
+    icon: ScrollText,
+    color: "text-red-400",
   },
 ]
 
 export default function NavMenu() {
-  const pathName = usePathname()
+  const pathname = usePathname().split("/")[1]
   return (
-    <div className="border-right border-right shadow-lg shadow-slate-400">
-      <div className="gap-2px-4 sticky top-0  z-20 items-center py-4 ">
-        <Link
-          className="px-4 text-center text-3xl font-bold text-slate-900"
-          href={"/"}
-        >
-          Sun Settled
-        </Link>
-      </div>
-      <aside className="w-60">
-        <ul className="text-md">
-          {navItems.map((item, index) => (
-            <li
-              key={index}
-              className={
-                "m-2 rounded-md transition hover:bg-indigo-500 hover:text-white"
-              }
+    <div className="fixed flex h-full flex-col space-y-4 bg-[#111827] py-4 text-white">
+      <div className="flex-1 px-3 py-2">
+        {navItems.map((item, index) => (
+          <div key={index} className={"space-y-1"}>
+            <StyledLink
+              href={item.path}
+              className="align-center group flex w-full justify-start rounded-lg p-3 text-sm font-medium transition hover:bg-white/10 hover:text-white"
             >
-              <Link href={item.path} className="block h-full w-full p-2 pl-4 ">
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </aside>
+              <item.icon className={`mr-3 h-5 w-5 ${item.color}`} />
+              {item.name}
+            </StyledLink>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
