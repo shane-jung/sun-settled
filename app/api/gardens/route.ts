@@ -5,10 +5,10 @@ import { NextResponse, NextRequest } from "next/server"
 export async function GET(request: NextRequest) {
   //get the search params from the request\
   let gardens
-  if (request.nextUrl.searchParams.get("slug"))
+  if (request.nextUrl.searchParams.get("id"))
     gardens = await prisma.garden.findUnique({
       where: {
-        slug: request.nextUrl.searchParams.get("slug")!,
+        id: request.nextUrl.searchParams.get("id")!,
       },
       include: {
         readings: true,
@@ -16,6 +16,8 @@ export async function GET(request: NextRequest) {
       },
     })
   else gardens = await prisma.garden.findMany()
+
+  console.log(gardens)
 
   return new NextResponse(JSON.stringify(gardens), {
     headers: {

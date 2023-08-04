@@ -1,14 +1,33 @@
 "use client"
 import {
-  LineChart,
   YAxis,
   XAxis,
   CartesianGrid,
-  Line,
   Legend,
   Tooltip,
+  BarChart,
+  Bar,
+  ResponsiveContainer,
 } from "recharts"
 import { GardenWithRelations } from "@/types"
+import { useState } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+]
+const monthObjects = months.map((month) => ({ name: month, value: null }))
 
 export default function GardenProduction({
   garden,
@@ -21,6 +40,8 @@ export default function GardenProduction({
     error(...args)
   }
 
+  const [year, setYear] = useState(new Date().getFullYear())
+
   const data = garden.readings.map((reading: any) => ({
     name: new Date(reading.timestamp).toLocaleString("en", {
       month: "long",
@@ -28,22 +49,46 @@ export default function GardenProduction({
     value: reading.value,
   }))
 
+  const data2 = monthObjects.map((reading: any) => {
+    const month = reading.name
+    const monthObject = data.find((monthObject) => {
+      return monthObject.name === month
+    })
+    if (!monthObject) return reading
+    return monthObject
+  })
+
   return (
-    <div>
-      <LineChart width={600} height={300} data={data}>
-        <Line
-          type="monotone"
-          dataKey="value"
-          name="Garden Production (kWh)"
-          stroke="#8884d8"
-          unit={" kWh"}
-        />
-        <CartesianGrid stroke="#ccc" />
-        <XAxis dataKey="name" />
-        <YAxis domain={[0, 20000]} />
-        <Legend />
-        <Tooltip />
-      </LineChart>
+    <div className="py-8">
+      <div className="mx-auto text-center">
+        <button className="inline-block">
+          <ChevronLeft className="text-4xl" />{" "}
+        </button>
+        <span className="text-center text-4xl font-medium">{year}</span>
+        <button className="inline-block">
+          {" "}
+          <ChevronRight />
+        </button>
+      </div>
+
+      <ResponsiveContainer width="100%" height={500}>
+        <BarChart data={data2}>
+          <CartesianGrid strokeDasharray={"4 2 1 2"} />
+          <Tooltip />
+
+          <Bar
+            dataKey="value"
+            name="Garden Production (kWh)"
+            unit={" kWh"}
+            fill="#099030CC"
+            stroke="#000000"
+            strokeWidth={2}
+          />
+          <XAxis dataKey="name" />
+          <YAxis domain={[0, 20000]} />
+          <Legend />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   )
 }

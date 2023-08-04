@@ -5,12 +5,16 @@ export default function Table({
   children: any
   className?: string
 }) {
-  return <table className={"w-full border-2 text-left"}>{children}</table>
+  return (
+    <table className={"w-min whitespace-nowrap border-2 text-left"}>
+      {children}
+    </table>
+  )
 }
 
 export function TableHeader({ children }: { children: any }) {
   return (
-    <thead className="bg-base-200 border-b-2 text-xs font-bold text-gray-500  [&>tr>*]:px-4 [&>tr>*]:py-3 ">
+    <thead className="bg-base-200 border-b-2 bg-gray-200 text-xs font-bold text-gray-500 [&>tr>*]:px-4 [&>tr>*]:py-3 ">
       {children}
     </thead>
   )

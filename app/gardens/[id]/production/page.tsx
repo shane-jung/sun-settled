@@ -5,30 +5,29 @@ const GardenProduction = dynamic(
 )
 import ReadingForm from "./ReadingForm"
 import { GardenWithRelations } from "@/types"
+import Table, { TableBody, TableHeader } from "@/components/Table"
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }: { params: { id: string } }) {
   const garden: GardenWithRelations = await fetch(
-    `http://localhost:3000/api/gardens?slug=${params.slug}`
+    `http://localhost:3000/api/gardens?id=${params.id}`
   ).then((res) => res.json())
 
   return (
     <>
-      <h2>Garden Production History</h2>
-
       <GardenProduction garden={garden} />
-      <table className="table table-lg">
-        <thead>
+      <Table>
+        <TableHeader>
           <tr>
             <th>Reading (kWh)</th>
             <th>Date</th>
           </tr>
-        </thead>
-        <tbody>
+        </TableHeader>
+        <TableBody>
           {garden?.readings.map((reading, index) => (
             <tr key={index}>
-              <td>{reading.value.toString()}</td>
+              <td>{new Number(reading.value).toLocaleString("en-US")}</td>
               <td>
-                {reading.timestamp.toLocaleString("default", {
+                {new Date(reading.timestamp).toLocaleString("default", {
                   month: "long",
                   year: "numeric",
                   day: "numeric",
@@ -36,8 +35,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
               </td>
             </tr>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       <ReadingForm gardenId={garden?.id!} />
     </>
   )

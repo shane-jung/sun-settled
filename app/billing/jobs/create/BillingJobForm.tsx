@@ -21,7 +21,8 @@ export default function BillingJobForm({
         scheduled_time: "09:00",
         garden_id: "",
         subscription_plan_id: "",
-        cycles: 1,
+        end_date: "",
+        name: "",
       }}
       onSubmit={(values) => {
         fetch("/api/billing/jobs", {
@@ -46,8 +47,10 @@ export default function BillingJobForm({
             jobs.
           </p> */}
           <FormGrid>
+            <label htmlFor="name">Name</label>
+            <Field type="text" name="name" />
             <label htmlFor="scheduled_date">
-              <p className="pb-2">Date</p>
+              <p className="pb-2">Start Date</p>
               <p className="text-sm italic">
                 First billing date for this job. Subsequent billing dates will
                 be occur on the same day of the month.
@@ -58,8 +61,8 @@ export default function BillingJobForm({
             <label htmlFor="scheduled_time">Time</label>
             <Field type="time" name="scheduled_time" />
 
-            <label htmlFor="cycles">Cycles</label>
-            <Field type="number" name="cycles" />
+            <label htmlFor="end_date">End Date</label>
+            <Field type="date" name="end_date" />
 
             <label>Garden</label>
             <Select

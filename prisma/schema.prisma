@@ -95,6 +95,7 @@ model Subscriber {
 
 model BillingJob {
   id                   String           @id @default(cuid())
+  name                 String
   garden_id            String
   subscription_plan_id String
   subscription_plan    SubscriptionPlan @relation(fields: [subscription_plan_id], references: [id])

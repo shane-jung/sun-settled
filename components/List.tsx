@@ -6,9 +6,9 @@ export default function List({
   items,
   children,
 }: {
-  children: any
+  children?: any
   pathName: string
-  items: { label: string; id: string }[]
+  items: { name: string; id: string }[]
 }) {
   return (
     <div className="flex h-full w-80 flex-col ">
@@ -18,10 +18,10 @@ export default function List({
             key={index}
             href={pathName + item.id}
             className={
-              "block border px-4 py-4 text-sm transition hover:bg-indigo-500 hover:text-white  "
+              "block rounded border px-4 py-4 text-sm text-slate-800 transition hover:bg-indigo-500 hover:text-white  "
             }
           >
-            {item.label}
+            {item.name}
           </StyledLink>
         </div>
       ))}

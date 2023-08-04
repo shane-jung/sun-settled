@@ -1,5 +1,5 @@
 "use client"
-import GardenSelect from "@/components/GardenSelect"
+import { Select } from "@/components/forms"
 import { Garden } from "@/types"
 import { Formik, Form, Field } from "formik"
 
@@ -60,12 +60,13 @@ export default function SubscriberForm({ gardens }: { gardens: Garden[] }) {
           <div>
             <h2 className="text-xl">Allocation</h2>
             <div className="flex flex-row gap-3">
-              <GardenSelect
-                gardens={gardens.map((garden) => ({
+              <Select
+                options={gardens.map((garden) => ({
                   value: garden.id,
                   label: garden.name,
                 }))}
-                handleChange={props.handleChange}
+                onChange={props.handleChange}
+                name={"garden_id"}
               />
               <label className="input-group">
                 <Field
