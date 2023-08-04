@@ -22,8 +22,8 @@ jobs:
         run: npm install --prefix lambda
 
       - name: Package Lambda Function
-        run: zip -r lambda-function.zip lambda
-        working-directory: lambda
+        run: (cd lambda && zip -r ../lambda-function.zip .)
+        working-directory: .
 
       - name: Deploy Lambda Function
         run: |
