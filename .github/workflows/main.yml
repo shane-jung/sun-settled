@@ -1,0 +1,41 @@
+name: Deploy Lambda Function
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-lambda:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: npm install --prefix lambda
+
+      - name: Package Lambda Function
+        run: zip -r lambda-function.zip lambda
+        working-directory: .
+
+      - name: Deploy Lambda Function
+        run: |
+          aws lambda create-function \
+            --function-name GenerateInvoices \
+            --runtime nodejs18.x \
+            --role arn:aws:iam::407768964271:role/lambda-main \
+            --handler index.handler \
+            --zip-file fileb://lambda-function.zip
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Cleanup
+        run: rm lambda-function.zip
