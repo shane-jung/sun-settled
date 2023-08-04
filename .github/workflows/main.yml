@@ -26,8 +26,7 @@ jobs:
         working-directory: .
 
       - name: Deploy Lambda Function
-        run: |
-          aws lambda create-function --function-name GenerateInvoices --runtime nodejs18.x --role arn:aws:iam::407768964271:role/lambda-main --handler index.handler --zip-file fileb://lambda-function.zip
+        run: aws lambda create-function --function-name GenerateInvoices --runtime nodejs18.x --role arn:aws:iam::407768964271:role/lambda-main --handler index.handler --zip-file fileb://lambda-function.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
