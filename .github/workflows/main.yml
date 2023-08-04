@@ -23,7 +23,7 @@ jobs:
 
       - name: Package Lambda Function
         run: zip -r lambda-function.zip lambda
-        working-directory: .
+        working-directory: lambda
 
       - name: Deploy Lambda Function
         run: |
