@@ -32,7 +32,7 @@ jobs:
             --runtime nodejs18.x \
             --role arn:aws:iam::407768964271:role/lambda-main \
             --handler index.handler \
-            --zip-file fileb://lambda-function.zip
+            --zip-file fileb://lambda-function.zip --debug
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
