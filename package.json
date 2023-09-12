@@ -19,6 +19,7 @@
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
+    "aws-crt": "^1.18.0",
     "formik": "^2.4.2",
     "lucide-react": "^0.263.1",
     "next": "^13.4.12",
