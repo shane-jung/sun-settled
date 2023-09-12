@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function Page({ children }: { children: React.ReactNode }) {
-  return <></>
+  return <p>hello</p>
 }

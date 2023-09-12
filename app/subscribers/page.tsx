@@ -1,3 +1,3 @@
 export default function Subscribers() {
-  return <></>
+  return <p>Subscribers</p>
 }
