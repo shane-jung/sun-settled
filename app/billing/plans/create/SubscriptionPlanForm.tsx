@@ -2,7 +2,7 @@
 import { Form, Formik } from "formik"
 import Field from "@/components/Field"
 import { Heading, SubHeading } from "@/components/typography"
-import { FormGrid, Select } from "@/components/forms"
+import Label, { FormGrid, Select, TextField } from "@/components/forms"
 import { Button } from "@/components/buttons"
 
 export default function SubscriptionPlanForm() {
@@ -28,19 +28,27 @@ export default function SubscriptionPlanForm() {
       {(props) => (
         <Form>
           <Heading> New Subscription Plan</Heading>
-          <p className="mb-12 w-[80%]">
+          <p className="mb-4 w-[80%]">
             A subscription plan is a set of rules that dictates how your
             subscribers are billed. Each plan describes how often subscribers
             are billed, and how their bill is calculated. Fill in the details
             below, and we'll handle the rest.
           </p>
 
-          <FormGrid>
-            <label>Plan Name</label>
-            <Field type="text" name="name" placeholder="Name" />
-            <label>Plan Description (to help you remember!)</label>
-            <Field type="text" name="description" placeholder="Description" />
-            <label>How often will your subscribers be billed?</label>
+          <>
+            <Label htmlFor="name">Plan Name</Label>
+            <TextField type="text" name="name" placeholder="Name" />
+            <Label htmlFor="description">
+              Plan Description (to help you remember!)
+            </Label>
+            <TextField
+              type="text"
+              name="description"
+              placeholder="Description"
+            />
+            <Label htmlFor="billingFrequency">
+              How often will your subscribers be billed?
+            </Label>
             <Select
               name="billingFrequency"
               onChange={props.handleChange}
@@ -49,18 +57,14 @@ export default function SubscriptionPlanForm() {
                 { label: "Annually", value: "annually" },
               ]}
             />
-            <label>
+            <Label htmlFor="isShareDependent">
               Are subscribers billed proportional to the number of shares they
               own?
-              <p className="text-sm italic">
-                Generally, the answer is yes. In rare cases, you might bill each
-                subscriber the same amount, regardless of the number of shares
-                they have.
-              </p>
-            </label>
+            </Label>
             <Select
               name="isShareDependent"
               onChange={props.handleChange}
+              className="mb-2"
               options={[
                 {
                   label:
@@ -72,22 +76,20 @@ export default function SubscriptionPlanForm() {
                   value: "false",
                 },
               ]}
-            />
-
-            <label>
+            />{" "}
+            <p className="mb-4 text-xs italic">
+              Generally, the answer is yes. In rare cases, you might bill each
+              subscriber the same amount, regardless of the number of shares
+              they have.
+            </p>
+            <Label htmlFor="isProductionDependent">
               Are subscribers billed proportional to the production of the
               garden?
-              <p className="text-sm italic">
-                This one depends on your model. If you answer yes, your
-                subscribers will be billed based on the value of the latest
-                production data. Don't worry, we'll remind you to keep your
-                production data up to date, and we'll never send a bill without
-                your approval.
-              </p>
-            </label>
+            </Label>
             <Select
               name="isProductionDependent"
               onChange={props.handleChange}
+              className="mb-2"
               options={[
                 {
                   label:
@@ -100,16 +102,22 @@ export default function SubscriptionPlanForm() {
                 },
               ]}
             />
-
-            <label>Rate</label>
-            <Field type="text" name="rate" placeholder="Rate ($)" />
-            <label>Annual Rate Increase</label>
-            <Field
+            <p className="mb-4 text-xs italic">
+              This one depends on your model. If you answer yes, your
+              subscribers will be billed based on the value of the latest
+              production data. Don't worry, we'll remind you to keep your
+              production data up to date, and we'll never send a bill without
+              your approval.
+            </p>
+            <Label htmlFor="rate">Rate</Label>
+            <TextField type="text" name="rate" placeholder="Rate ($)" />
+            <Label htmlFor="rateIncrease">Annual Rate Increase</Label>
+            <TextField
               type="text"
               name="rateIncrease"
               placeholder="Annual rate Increase (%)"
             />
-          </FormGrid>
+          </>
 
           <Button className="mx-auto mb-6 mt-12 block" type="submit">
             Submit

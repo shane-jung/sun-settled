@@ -12,24 +12,21 @@ export default async function Subscribers({
   ).then((res) => res.json())
 
   return (
-    <>
-      <h2>Subscribers</h2>
-      <Table>
-        <TableHeader>
-          <tr>
-            <th>Subscriber Name</th>
-            <th>Allocation (kW)</th>
+    <Table>
+      <TableHeader>
+        <tr>
+          <th>Subscriber Name</th>
+          <th>Allocation (kW)</th>
+        </tr>
+      </TableHeader>
+      <TableBody>
+        {garden?.subscribers.map((subscriber, index) => (
+          <tr key={index}>
+            <td>{subscriber.name}</td>
+            <td>{subscriber.allocation.toString()}</td>
           </tr>
-        </TableHeader>
-        <TableBody>
-          {garden?.subscribers.map((subscriber, index) => (
-            <tr key={index}>
-              <td>{subscriber.name}</td>
-              <td>{subscriber.allocation.toString()}</td>
-            </tr>
-          ))}
-        </TableBody>
-      </Table>
-    </>
+        ))}
+      </TableBody>
+    </Table>
   )
 }

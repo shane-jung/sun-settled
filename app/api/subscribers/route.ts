@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma"
+import stripe from "@/lib/stripe"
 import { revalidatePath } from "next/cache"
 import { NextResponse, NextRequest } from "next/server"
 
@@ -9,9 +10,6 @@ export async function GET(request: NextRequest) {
     subscribers = await prisma.subscriber.findUnique({
       where: {
         id: request.nextUrl.searchParams.get("id")!,
-      },
-      include: {
-        invoices: true,
       },
     })
   else subscribers = await prisma.subscriber.findMany()
@@ -45,8 +43,17 @@ export async function POST(request: Request) {
 
   const data = await request.json()
 
+  const stripeCustomer = await stripe.customers.create({
+    name: data.name,
+    email: data.email,
+  })
+  if (!stripeCustomer)
+    return new NextResponse(
+      JSON.stringify({ error: "stripe customer not created" })
+    )
+  console.log(stripeCustomer)
   const subscriber = await prisma.subscriber.create({
-    data,
+    data: { ...data, stripeCustomerId: stripeCustomer.id },
   })
 
   return new NextResponse(JSON.stringify(subscriber), {

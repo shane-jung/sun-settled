@@ -5,6 +5,21 @@ import {
   CreateScheduleCommand,
 } from "@aws-sdk/client-scheduler"
 
+export async function GET(request: NextRequest) {
+  //get the search params from the request
+  let billingJobs
+  if (request.nextUrl.searchParams.get("id"))
+    billingJobs = await prisma.billingJob.findUnique({
+      where: {
+        id: request.nextUrl.searchParams.get("id")!,
+      },
+    })
+  else billingJobs = await prisma.billingJob.findMany()
+
+  console.log(billingJobs)
+  return new NextResponse(JSON.stringify(billingJobs))
+}
+
 export async function POST(request: NextRequest) {
   const data = await request.json()
 
@@ -146,8 +161,6 @@ export async function POST(request: NextRequest) {
   }
   const command = new CreateScheduleCommand(input)
   const response = await client.send(command)
-  //   console.log(response)
-  //   console.log(client)
 
   return NextResponse.json({
     message: "Hello, world!",

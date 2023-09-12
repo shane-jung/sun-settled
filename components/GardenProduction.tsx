@@ -14,18 +14,18 @@ import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
   "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ]
 const monthObjects = months.map((month) => ({ name: month, value: null }))
 
@@ -44,7 +44,7 @@ export default function GardenProduction({
 
   const data = garden.readings.map((reading: any) => ({
     name: new Date(reading.timestamp).toLocaleString("en", {
-      month: "long",
+      month: "short",
     }),
     value: reading.value,
   }))

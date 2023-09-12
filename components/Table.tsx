@@ -1,3 +1,5 @@
+import { twMerge } from "tailwind-merge"
+
 export default function Table({
   children,
   className,
@@ -6,7 +8,12 @@ export default function Table({
   className?: string
 }) {
   return (
-    <table className={"w-min whitespace-nowrap border-2 text-left"}>
+    <table
+      className={twMerge(
+        "w-min whitespace-nowrap border-2 text-left",
+        className
+      )}
+    >
       {children}
     </table>
   )

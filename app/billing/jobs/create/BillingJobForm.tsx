@@ -1,6 +1,6 @@
 "use client"
 import { Button } from "@/components/buttons"
-import { FormGrid, Select } from "@/components/forms"
+import Label, { FormGrid, Select, TextField } from "@/components/forms"
 import { Link } from "@/components/links"
 import { Heading } from "@/components/typography"
 import { Garden, SubscriptionPlan } from "@/types"
@@ -34,67 +34,60 @@ export default function BillingJobForm({
       {(props) => (
         <Form>
           <Heading>New Billing Job</Heading>
-          {/* <p className="mb-4 w-[75%]">
-            A billing job generates invoices for your community solar gardens on
-            a scheduled date. You can create a one-time billing job or a
-            recurring billing job.
+          <Label htmlFor="name">Name</Label>
+          <TextField
+            type="text"
+            name="name"
+            placeholder="e.g. Billing Job #1"
+          />
+
+          <Label htmlFor="scheduled_date">Start Date</Label>
+
+          <TextField type="date" name="scheduled_date" className="mb-2" />
+
+          <p className="mb-4 text-xs italic">
+            First billing date for this job. Subsequent billing dates will be
+            occur on the same day of the month.
           </p>
-          <p className="mb-4 w-[75%]">
-            To configure a billing job, you will need to specify which garden to
-            bill, and which subscription plan to use. For example, if you offer
-            two main subscription plans for your gardens, and you have 3
-            different gardens, you will need to configure 6 separate billing
-            jobs.
-          </p> */}
-          <FormGrid>
-            <label htmlFor="name">Name</label>
-            <Field type="text" name="name" />
-            <label htmlFor="scheduled_date">
-              <p className="pb-2">Start Date</p>
-              <p className="text-sm italic">
-                First billing date for this job. Subsequent billing dates will
-                be occur on the same day of the month.
-              </p>
-            </label>
-            <Field type="date" name="scheduled_date" />
 
-            <label htmlFor="scheduled_time">Time</label>
-            <Field type="time" name="scheduled_time" />
+          <Label htmlFor="scheduled_time">Time</Label>
+          <TextField type="time" name="scheduled_time" />
 
-            <label htmlFor="end_date">End Date</label>
-            <Field type="date" name="end_date" />
+          <Label htmlFor="end_date">End Date</Label>
+          <TextField type="date" name="end_date" />
 
-            <label>Garden</label>
-            <Select
-              name="garden_id"
-              onChange={props.handleChange}
-              options={gardens.map((garden) => ({
-                value: garden.id,
-                label: garden.name,
-              }))}
-            />
-            <div>
-              <label className="pb-2">Subscription Plan</label>
-              <p className="text-sm italic">
-                Configure more subscription plans{" "}
-                <Link
-                  className="text-bold not-italic text-indigo-800 transition hover:text-indigo-700"
-                  href="/billing/plans"
-                >
-                  here
-                </Link>
-                .
-              </p>
-            </div>
-            <Select
-              name="subscription_plan_id"
-              onChange={props.handleChange}
-              options={plans.map((plan) => ({
-                value: plan.id,
-                label: plan.name,
-              }))}
-            />
-          </FormGrid>
+          <Label htmlFor="gardenId">Garden</Label>
+          <Select
+            name="garden_id"
+            onChange={props.handleChange}
+            options={gardens.map((garden) => ({
+              value: garden.id,
+              label: garden.name,
+            }))}
+          />
+
+          <Label htmlFor="subscriptionPlanId">Subscription Plan</Label>
+
+          <Select
+            name="subscription_plan_id"
+            className="mb-2"
+            onChange={props.handleChange}
+            options={plans.map((plan) => ({
+              value: plan.id,
+              label: plan.name,
+            }))}
+          />
+          <p className="mb-4 text-xs italic">
+            Configure more subscription plans{" "}
+            <Link
+              className="text-bold not-italic text-indigo-800 transition hover:text-indigo-700"
+              href="/billing/plans"
+            >
+              here
+            </Link>
+            .
+          </p>
+
           <Button type="submit">Create Billing Job</Button>
         </Form>
       )}

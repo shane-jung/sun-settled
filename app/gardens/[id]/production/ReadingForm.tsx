@@ -9,7 +9,6 @@ export default function ReadingForm({ gardenId }: { gardenId: string }) {
         timestamp: "",
       }}
       onSubmit={(values) => {
-        console.log(gardenId)
         fetch("/api/reading", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

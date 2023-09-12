@@ -43,7 +43,7 @@ const navItems: {
 ]
 
 export default function NavMenu() {
-  const pathname = usePathname().split("/")[1]
+  // const pathname = usePathname().split("/")[1]
   return (
     <div className="fixed flex h-full flex-col space-y-4 bg-[#111827] py-4 text-white">
       <div className="flex-1 px-3 py-2">

@@ -1,9 +1,23 @@
 import React from "react"
 import RouteLayout from "../RouteLayout"
+import stripe from "@/lib/stripe"
+import Navigation from "@/components/Navigation"
 
-export default function layout({ children }: { children: React.ReactNode }) {
+export default async function layout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const invoices = (await stripe.invoices.list()).data
   return (
-    <RouteLayout items={[]} label="Invoice" pathName={"/invoices/"}>
+    <RouteLayout
+      items={invoices.map((invoice: any) => ({
+        name: invoice.customer_name,
+        id: invoice.id.split("_")[1],
+      }))}
+      label="Invoice"
+      pathName={"/invoices/"}
+    >
       {children}
     </RouteLayout>
   )

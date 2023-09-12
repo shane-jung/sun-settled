@@ -2,6 +2,8 @@
 
 import { Formik, Form } from "formik"
 import Field from "@/components/Field"
+import Label, { TextField } from "@/components/forms"
+import { Button } from "@/components/buttons"
 
 export default function GardenForm() {
   return (
@@ -21,25 +23,13 @@ export default function GardenForm() {
       >
         <Form>
           <h1 className="text-2xl">New Garden</h1>
-          <label htmlFor="name" className="label">
-            Garden Name
-          </label>
-          <Field name="name" type="text" required />
+          <Label htmlFor="name">Garden Name</Label>
+          <TextField name="name" required />
 
-          <label htmlFor="capacityDc" className="label">
-            Capacity DC
-          </label>
-          <Field name="capacityDc" type="text" required />
+          <Label htmlFor="capacityDc">Capacity DC</Label>
+          <TextField name="capacityDc" required />
 
-          <button
-            className="btn btn-secondary"
-            type="submit"
-            onClick={() => {
-              console.log("click")
-            }}
-          >
-            Save
-          </button>
+          <Button type="submit">Save</Button>
         </Form>
       </Formik>
     </div>

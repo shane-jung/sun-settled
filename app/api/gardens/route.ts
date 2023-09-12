@@ -17,8 +17,6 @@ export async function GET(request: NextRequest) {
     })
   else gardens = await prisma.garden.findMany()
 
-  console.log(gardens)
-
   return new NextResponse(JSON.stringify(gardens), {
     headers: {
       "content-type": "application/json",
