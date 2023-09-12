@@ -7,6 +7,6 @@ export const metadata: Metadata = {
   description: "Community Solar Billing",
 }
 
-export default function Page({ children }: { children: React.ReactNode }) {
+export default function Page() {
   return <p>hello</p>
 }
