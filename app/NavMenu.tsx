@@ -1,8 +1,8 @@
 "use client"
-import { Link, StyledLink } from "@/components/links"
-import { usePathname } from "next/navigation"
-import { HomeIcon, Users, Receipt, Sun, ScrollText } from "lucide-react"
+
+import { HomeIcon, Receipt, ScrollText, Sun, Users } from "lucide-react"
 import { LucideIcon } from "lucide-react"
+import Link from "next/link"
 
 const navItems: {
   name: string
@@ -49,13 +49,13 @@ export default function NavMenu() {
       <div className="flex-1 px-3 py-2">
         {navItems.map((item, index) => (
           <div key={index} className={"space-y-1"}>
-            <StyledLink
+            <Link
               href={item.path}
               className="align-center group flex w-full justify-start rounded-lg p-3 text-sm font-medium transition hover:bg-white/10 hover:text-white"
             >
               <item.icon className={`mr-3 h-5 w-5 ${item.color}`} />
               {item.name}
-            </StyledLink>
+            </Link>
           </div>
         ))}
       </div>
