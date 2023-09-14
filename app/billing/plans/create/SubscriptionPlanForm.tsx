@@ -1,9 +1,7 @@
 "use client"
-import { Form, Formik } from "formik"
-import Field from "@/components/Field"
-import { Heading, SubHeading } from "@/components/typography"
+
 import Label, { FormGrid, Select, TextField } from "@/components/forms"
-import { Button } from "@/components/buttons"
+import { Form, Formik } from "formik"
 
 export default function SubscriptionPlanForm() {
   return (
@@ -27,7 +25,7 @@ export default function SubscriptionPlanForm() {
     >
       {(props) => (
         <Form>
-          <Heading> New Subscription Plan</Heading>
+          <h1> New Subscription Plan</h1>
           <p className="mb-4 w-[80%]">
             A subscription plan is a set of rules that dictates how your
             subscribers are billed. Each plan describes how often subscribers
@@ -119,9 +117,9 @@ export default function SubscriptionPlanForm() {
             />
           </>
 
-          <Button className="mx-auto mb-6 mt-12 block" type="submit">
+          <button className="mx-auto mb-6 mt-12 btn" type="submit">
             Submit
-          </Button>
+          </button>
         </Form>
       )}
     </Formik>
