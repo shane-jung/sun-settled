@@ -63,7 +63,6 @@ model VerificationToken {
 model Garden {
   id          String       @id @default(cuid())
   name        String
-  slug        String       @unique
   capacityDc  Decimal      @default(0)
   description String?
   subscribers Subscriber[]
@@ -72,12 +71,13 @@ model Garden {
 }
 
 model Reading {
-  id                   String   @id @default(cuid())
-  gardenId             String
-  garden               Garden   @relation(fields: [gardenId], references: [id])
-  production_read_date Int      @default(1)
-  timestamp            DateTime
-  value                Decimal
+  id        String   @id @default(cuid())
+  gardenId  String
+  garden    Garden   @relation(fields: [gardenId], references: [id])
+  startDate DateTime
+  endDate   DateTime
+  inputDate DateTime
+  value     Decimal
 }
 
 model Subscriber {

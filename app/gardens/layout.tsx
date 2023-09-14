@@ -1,12 +1,10 @@
-import { Metadata } from "next"
 import { Garden } from "@prisma/client"
-import List from "../../components/List"
-import { StyledLink } from "@/components/links"
-import { Heading } from "@/components/typography"
+import { Metadata } from "next"
+
 import RouteLayout from "../RouteLayout"
 
 export const metadata: Metadata = {
-  title: "Community Solar Gardens",
+  title: "Community Solar Gardens | Sun Settled",
   description: "Community Solar Billing",
 }
 

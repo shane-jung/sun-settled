@@ -1,17 +1,18 @@
 "use client"
+
+import { GardenWithRelations } from "@/types"
+import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useState } from "react"
 import {
-  YAxis,
-  XAxis,
+  Bar,
+  BarChart,
   CartesianGrid,
   Legend,
-  Tooltip,
-  BarChart,
-  Bar,
   ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts"
-import { GardenWithRelations } from "@/types"
-import { useState } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const months = [
   "Jan",
@@ -43,10 +44,10 @@ export default function GardenProduction({
   const [year, setYear] = useState(new Date().getFullYear())
 
   const data = garden.readings.map((reading: any) => ({
-    name: new Date(reading.timestamp).toLocaleString("en", {
+    name: new Date(reading.startDate).toLocaleString("en", {
       month: "short",
     }),
-    value: reading.value,
+    value: reading.value as number,
   }))
 
   const data2 = monthObjects.map((reading: any) => {
@@ -59,8 +60,8 @@ export default function GardenProduction({
   })
 
   return (
-    <div className="py-8">
-      <div className="mx-auto text-center">
+    <div className="h-full py-4">
+      {/* <div className="mx-auto text-center">
         <button className="inline-block">
           <ChevronLeft className="text-4xl" />{" "}
         </button>
@@ -69,9 +70,9 @@ export default function GardenProduction({
           {" "}
           <ChevronRight />
         </button>
-      </div>
+      </div> */}
 
-      <ResponsiveContainer width="100%" height={500}>
+      <ResponsiveContainer maxHeight={300}>
         <BarChart data={data2}>
           <CartesianGrid strokeDasharray={"4 2 1 2"} />
           <Tooltip />
@@ -80,12 +81,21 @@ export default function GardenProduction({
             dataKey="value"
             name="Garden Production (kWh)"
             unit={" kWh"}
-            fill="#099030CC"
+            fill="#5478d8"
             stroke="#000000"
-            strokeWidth={2}
+            strokeWidth={1}
           />
           <XAxis dataKey="name" />
-          <YAxis domain={[0, 20000]} />
+          <YAxis
+            domain={[
+              0,
+              1200 *
+                Math.round(
+                  Math.max(...data2.map((reading: any) => reading.value)) / 1000
+                ),
+            ]}
+          />
+
           <Legend />
         </BarChart>
       </ResponsiveContainer>

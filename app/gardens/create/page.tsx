@@ -1,9 +1,8 @@
 "use client"
 
-import { Formik, Form } from "formik"
-import Field from "@/components/Field"
 import Label, { TextField } from "@/components/forms"
-import { Button } from "@/components/buttons"
+import { Form, Formik } from "formik"
+import { revalidatePath } from "next/cache"
 
 export default function GardenForm() {
   return (
@@ -18,18 +17,25 @@ export default function GardenForm() {
             method: "POST",
             body: JSON.stringify(values),
           })
-          console.log(res)
+
+          if (res.ok) {
+            window.location.href = `/gardens/${(await res.json()).id}`
+          }
+
+          revalidatePath("/api/gardens")
         }}
       >
         <Form>
-          <h1 className="text-2xl">New Garden</h1>
+          <h1 className="mb-4 text-2xl">Create New Garden</h1>
           <Label htmlFor="name">Garden Name</Label>
           <TextField name="name" required />
 
           <Label htmlFor="capacityDc">Capacity DC</Label>
           <TextField name="capacityDc" required />
 
-          <Button type="submit">Save</Button>
+          <button className="btn" type="submit">
+            Save
+          </button>
         </Form>
       </Formik>
     </div>

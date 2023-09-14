@@ -7,7 +7,16 @@ module.exports = {
   ],
 
   theme: {
-    extend: {},
+    extend: {
+      // fontWeight: {
+      //   light: 200,
+      //   normal: 300,
+      //   bold: 400,
+      // },
+      fontFamily: {
+        sans: ['"Noto Sans JP"', "sans-serif"],
+      },
+    },
     container: {
       padding: ".5rem",
     },

@@ -1,6 +1,4 @@
 import List from "@/components/List"
-import Link from "next/link"
-import { Suspense } from "react"
 
 export default function RouteLayout({
   children,
@@ -14,11 +12,8 @@ export default function RouteLayout({
   pathName: string
 }) {
   return (
-    <div className="flex gap-4">
-      <div className="">
-        <Link className="mb-4 block text-3xl" href={pathName}>
-          {label}s
-        </Link>
+    <div className="">
+      <div className="bg-white border-r-2 h-full fixed">
         <List
           pathName={pathName}
           items={items.map((item) => ({
@@ -26,16 +21,8 @@ export default function RouteLayout({
             name: item.name,
           }))}
         />
-        {/* <div>
-          <Link
-            className="mx-auto my-2 block rounded bg-lime-500 px-4 py-2 text-center text-white transition hover:bg-lime-400"
-            href={`${pathName}create`}
-          >
-            Create {label}
-          </Link>
-        </div> */}
       </div>
-      <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+      <div className="h-full  pl-[calc(350px+1rem)] pr-4 py-8 ">{children}</div>
     </div>
   )
 }

@@ -1,11 +1,9 @@
 import Link from "next/link"
-import { StyledLink } from "@/components/links"
-import { Heading, SubHeading } from "@/components/typography"
 
 export default function Page() {
   return (
     <div>
-      <Heading className="border-b-2">Billing</Heading>
+      <h2 className="border-b-2">Billing</h2>
       <p className="pb-12">
         Sun Settled simplifies the otherwise complicated process of billing for
         community solar gardens. We break the process into two pieces:
@@ -13,9 +11,9 @@ export default function Page() {
 
       <div className="grid grid-cols-2 gap-20 px-32">
         <div className="border-2">
-          <SubHeading className=" border-b-2 bg-gray-200 py-4 pl-4">
+          <h3 className=" border-b-2 bg-gray-200 py-4 pl-4">
             Subscription Plans
-          </SubHeading>
+          </h3>
           <div className="p-4">
             <p className="pb-4">
               A <span className="font-bold">subscription plan</span> defines how
@@ -30,18 +28,16 @@ export default function Page() {
               "Annual Plan" that bills subscribers $1,000 per year.
             </p>
 
-            <StyledLink
+            <Link
               className="mx-auto my-2 block w-min whitespace-nowrap rounded-md border bg-indigo-500 p-3 text-white transition hover:bg-indigo-400"
               href={"/billing/plans"}
             >
               Subscription Plans
-            </StyledLink>
+            </Link>
           </div>
         </div>
         <div className="border-2">
-          <SubHeading className="border-b-2 bg-gray-200 py-4 pl-4">
-            Billing Jobs
-          </SubHeading>
+          <h2 className="border-b-2 bg-gray-200 py-4 pl-4">Billing Jobs</h2>
           <div className="p-4">
             <p className="pb-4">
               A <span className="font-bold">billing job</span> defines{" "}
@@ -57,12 +53,12 @@ export default function Page() {
               billing job should run on the first of each month, and that it
               should bill subscribers for the next 12 months.
             </p>
-            <StyledLink
+            <Link
               className="mx-auto my-2 block w-min whitespace-nowrap rounded-md border bg-indigo-500 p-3 text-white transition hover:bg-indigo-400"
               href={"/billing/jobs/create"}
             >
               Schedule New Billing Job
-            </StyledLink>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,9 +1,8 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
-import { NextResponse, NextRequest } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
-  //get the search params from the request\
   let gardens
   if (request.nextUrl.searchParams.get("id"))
     gardens = await prisma.garden.findUnique({
@@ -42,12 +41,7 @@ export async function PUT(request: NextRequest) {
 export async function POST(request: NextRequest) {
   revalidatePath("http://localhost:3000/api/gardens")
   const data = await request.json()
-  const garden = await prisma.garden.create({
-    data: {
-      ...data,
-      slug: data.name.toLowerCase().replace(/ /g, "-"),
-    },
-  })
+  const garden = await prisma.garden.create({ data })
   return new NextResponse(JSON.stringify(garden), {
     headers: {
       "content-type": "application/json",

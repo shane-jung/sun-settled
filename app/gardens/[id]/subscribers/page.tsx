@@ -1,4 +1,3 @@
-import Table, { TableBody, TableHeader } from "@/components/Table"
 import { GardenWithRelations } from "@/types"
 
 export default async function Subscribers({
@@ -11,22 +10,5 @@ export default async function Subscribers({
     { next: { revalidate: 1 } }
   ).then((res) => res.json())
 
-  return (
-    <Table>
-      <TableHeader>
-        <tr>
-          <th>Subscriber Name</th>
-          <th>Allocation (kW)</th>
-        </tr>
-      </TableHeader>
-      <TableBody>
-        {garden?.subscribers.map((subscriber, index) => (
-          <tr key={index}>
-            <td>{subscriber.name}</td>
-            <td>{subscriber.allocation.toString()}</td>
-          </tr>
-        ))}
-      </TableBody>
-    </Table>
-  )
+  return <h2>hello</h2>
 }

@@ -1,21 +1,15 @@
-import "./globals.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import React, { Suspense } from "react"
-// import { Elements } from "@stripe/react-stripe-js"
-// import { loadStripe } from "@stripe/stripe-js"
+import React from "react"
 
-import Loading from "./loading"
-import NavMenu from "./NavMenu"
 import AuthProvider from "./AuthProvider"
 import TopBar from "./TopBar"
-
-// const stripePromise = loadStripe(process.env.STRIPE_SECRET_KEY!)
+import "./globals.css"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Community Solar Billing",
+  title: "Home | Sun Settled",
 }
 
 export default function RootLayout({
@@ -27,11 +21,9 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <html lang="en">
-        <body className={inter.className}>
+        <body className="bg-gray-100">
           <TopBar />
-          <Suspense fallback={<Loading />}>
-            <div className="max-w-[100vw] p-24 ">{children}</div>
-          </Suspense>
+          <div className="pt-16 min-h-[100vh]">{children}</div>
         </body>
       </html>
     </AuthProvider>
