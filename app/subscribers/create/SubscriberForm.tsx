@@ -1,9 +1,9 @@
 "use client"
-import { Button } from "@/components/buttons"
+
 import Label, { Select, TextField } from "@/components/forms"
 import { getSubscriptionPlans } from "@/lib/fetchData"
 import { Garden } from "@/types"
-import { Formik, Form, Field } from "formik"
+import { Field, Form, Formik } from "formik"
 
 export default async function SubscriberForm({
   gardens,
@@ -62,7 +62,9 @@ export default async function SubscriberForm({
             options={planOptions}
           />
 
-          <Button type="submit">Save</Button>
+          <button className="btn" type="submit">
+            Save
+          </button>
         </Form>
       )}
     </Formik>

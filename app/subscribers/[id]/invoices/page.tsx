@@ -1,4 +1,3 @@
-import Table, { TableBody, TableHeader } from "@/components/Table"
 import { getSubscriber } from "@/lib/fetchData"
 import stripe from "@/lib/stripe"
 
@@ -16,16 +15,16 @@ export default async function Page({
 
   return (
     <div>
-      <Table className="w-full">
-        <TableHeader>
+      <table className="w-full">
+        <thead>
           <tr>
             <th>Invoice</th>
             <th>Amount</th>
             <th>Status</th>
             <th>Date</th>
           </tr>
-        </TableHeader>
-        <TableBody>
+        </thead>
+        <tbody>
           {invoices.data.map((invoice: any) => (
             <tr key={invoice.id}>
               <td>{invoice.id}</td>
@@ -40,8 +39,8 @@ export default async function Page({
               </td>
             </tr>
           ))}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
     </div>
   )
 }
