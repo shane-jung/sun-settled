@@ -1,21 +1,39 @@
 "use client"
 
-import Label, { Select, TextField } from "@/components/forms"
-import { getSubscriptionPlans } from "@/lib/fetchData"
-import { Garden } from "@/types"
-import { Field, Form, Formik } from "formik"
+import { Input } from "@/components/forms"
+import { Garden, SubscriptionPlan } from "@/types"
+import { Form, Formik } from "formik"
+import { useRouter } from "next/navigation"
+import * as Yup from "yup"
 
-export default async function SubscriberForm({
+const validationSchema = Yup.object({
+  name: Yup.string()
+    .min(8, "Please enter a name between 8 and 100 characters")
+    .max(100, "Please enter a name between 8 and 100 characters")
+    .required("Field is required"),
+  email: Yup.string().email("Please enter a valid email address"),
+  gardenId: Yup.string().required("Required"),
+  allocation: Yup.number()
+    .min(0, "Allocation must be positive")
+    .max(1000, "Please enter a valid allocation")
+    .required("Field is required"),
+  subscriptionPlanId: Yup.string().required("Required"),
+})
+
+export default function SubscriberForm({
   gardens,
+  subscriptionPlans,
 }: {
   gardens: Garden[]
+  subscriptionPlans: SubscriptionPlan[]
 }) {
-  const planOptions = (await getSubscriptionPlans()).map((plan: any) => ({
-    label: plan.name,
-    value: plan.id,
-  }))
+  console.log(gardens, subscriptionPlans)
+  const router = useRouter()
+
   return (
     <Formik
+      validateOnChange
+      validationSchema={validationSchema}
       initialValues={{
         name: "",
         email: "",
@@ -29,39 +47,39 @@ export default async function SubscriberForm({
           method: "POST",
           body: JSON.stringify(values),
         })
+
+        if (res.ok) router.push("/subscribers")
       }}
     >
       {(props) => (
         <Form>
-          <h1 className="mb-4 text-2xl">New Subscriber</h1>
+          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-12 border-gray-900/10 border-b-2">
+            <div className="font-semibold text-xl mb-2">
+              <h2 className="mb-4 text-2xl">New Subscriber</h2>
+            </div>
 
-          <Label htmlFor="name">Subscriber Name</Label>
-          <TextField required name="name" />
+            <Input type="text" name="name" label="Subscriber Name" />
 
-          <Label htmlFor="capacityDc">Subscriber Email</Label>
-          <TextField name="email" type="email" />
+            <Input type="email" name="email" label="Email" />
 
-          <Label htmlFor="gardenId">Garden Ownership</Label>
-          <Select
-            options={gardens.map((garden) => ({
-              value: garden.id,
-              label: garden.name,
-            }))}
-            onChange={props.handleChange}
-            name={"gardenId"}
-          />
+            <Input type="select" name={"gardenId"} label="Garden Ownership">
+              {gardens.map((garden: Garden) => (
+                <option key={garden.id} value={garden.id}>
+                  {garden.name}
+                </option>
+              ))}
+            </Input>
 
-          <Label htmlFor="allocation">Allocation (kW)</Label>
-          <TextField name="allocation" required />
+            <Input type="number" name="allocation" label="Allocation (kW)" />
 
-          <Label htmlFor={"subscriptionPlanId"}>Payment Plan</Label>
-
-          <Select
-            name="subscriptionPlanId"
-            onChange={props.handleChange}
-            options={planOptions}
-          />
-
+            <Input label="Payment Plan" name="subscriptionPlanId" type="select">
+              {subscriptionPlans.map((plan: SubscriptionPlan) => (
+                <option key={plan.id} value={plan.id}>
+                  {plan.name}
+                </option>
+              ))}
+            </Input>
+          </div>
           <button className="btn" type="submit">
             Save
           </button>

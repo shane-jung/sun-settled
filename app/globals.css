@@ -1,6 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400&display=swap");
-@import url("react-loading-skeleton/dist/skeleton.css");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,9 +12,34 @@ body {
   .link {
     @apply inline-block whitespace-nowrap transition hover:text-blue-500;
   }
+
+  button,
+  a {
+    background-color: unset;
+  }
   .btn {
     @apply inline-block rounded-md bg-blue-500 px-4 py-2 text-white shadow-md transition hover:bg-blue-600;
   }
+
+  .btn-outline {
+    @apply inline-block rounded-md border-2 border-blue-500 px-4 py-2 text-blue-500 shadow-md transition hover:bg-blue-500 hover:text-white;
+  }
+
+  .btn-secondary {
+    @apply inline-block rounded-md !bg-gray-500 px-4 py-2 text-white shadow-md transition hover:!bg-gray-600;
+  }
+
+  .btn-secondary-outline {
+    @apply inline-block rounded-md border-2 border-gray-500 px-4 py-2 text-gray-500 shadow-md transition hover:bg-gray-500 hover:text-white;
+  }
+
+  .btn-danger {
+    @apply inline-block rounded-md bg-red-500 px-4 py-2 text-white shadow-md transition hover:bg-red-600;
+  }
+  /* .inactive {
+    @apply pointer-events-none bg-gray-300 text-gray-700 opacity-50;
+  } */
+
   table {
     @apply w-full table-auto;
   }
@@ -36,5 +58,9 @@ body {
   }
   th {
     @apply border-b-2 font-medium;
+  }
+
+  .panel {
+    @apply rounded-lg border-2 border-gray-200 bg-white p-4 shadow-md;
   }
 }

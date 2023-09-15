@@ -1,10 +1,25 @@
 "use client"
 
-import Label, { FormGrid, Select, TextField } from "@/components/forms"
+import { Input } from "@/components/forms"
 import { Garden, SubscriptionPlan } from "@/types"
-import { Field, Form, Formik } from "formik"
+import { Form, Formik } from "formik"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import React from "react"
+import * as Yup from "yup"
+
+const validationSchema = Yup.object({
+  name: Yup.string()
+    .min(8, "Please enter a name between 8 and 100 characters")
+
+    .max(100, "Please enter a name between 8 and 100 characters")
+    .required("Field is required"),
+  scheduled_date: Yup.date().required("Required"),
+  scheduled_time: Yup.string().required("Required"),
+  end_date: Yup.date().required("Required"),
+  garden_id: Yup.string().required("Required"),
+  subscription_plan_id: Yup.string().required("Required"),
+})
 
 export default function BillingJobForm({
   gardens,
@@ -13,8 +28,11 @@ export default function BillingJobForm({
   gardens: Garden[]
   plans: SubscriptionPlan[]
 }) {
+  const router = useRouter()
   return (
     <Formik
+      validateOnChange
+      validationSchema={validationSchema}
       initialValues={{
         scheduled_date: "",
         scheduled_time: "09:00",
@@ -23,71 +41,64 @@ export default function BillingJobForm({
         end_date: "",
         name: "",
       }}
-      onSubmit={(values) => {
-        fetch("/api/billing/jobs", {
+      onSubmit={async (values, { resetForm }) => {
+        const res = await fetch("/api/jobs", {
           method: "POST",
           body: JSON.stringify(values),
         })
+
+        if (res.ok) {
+          router.push("/billing/jobs")
+        }
       }}
     >
       {(props) => (
         <Form>
-          <h1>New Billing Job</h1>
-          <Label htmlFor="name">Name</Label>
-          <TextField
-            type="text"
-            name="name"
-            placeholder="e.g. Billing Job #1"
-          />
+          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-12 border-gray-900/10 border-b-2">
+            <div>
+              <h2 className="font-semibold text-xl mb-2">New Billing Job</h2>
+            </div>
+            <Input type="text" name="name" label="Billing Job Name" />
 
-          <Label htmlFor="scheduled_date">Start Date</Label>
+            <Input
+              type="date"
+              name="scheduled_date"
+              label="Start Date"
+              helper="First billing date for this job. Subsequent billing dates will be
+            occur on the same day of the month."
+            />
 
-          <TextField type="date" name="scheduled_date" className="mb-2" />
+            <Input type="date" name="end_date" label="End Date" />
 
-          <p className="mb-4 text-xs italic">
-            First billing date for this job. Subsequent billing dates will be
-            occur on the same day of the month.
-          </p>
+            <Input type="time" name="scheduled_time" label="Billing Time" />
 
-          <Label htmlFor="scheduled_time">Time</Label>
-          <TextField type="time" name="scheduled_time" />
+            <Input type="select" label="Garden" name="garden_id">
+              {gardens.map((garden) => (
+                <option value={garden.id}>{garden.name}</option>
+              ))}
+            </Input>
 
-          <Label htmlFor="end_date">End Date</Label>
-          <TextField type="date" name="end_date" />
-
-          <Label htmlFor="gardenId">Garden</Label>
-          <Select
-            name="garden_id"
-            onChange={props.handleChange}
-            options={gardens.map((garden) => ({
-              value: garden.id,
-              label: garden.name,
-            }))}
-          />
-
-          <Label htmlFor="subscriptionPlanId">Subscription Plan</Label>
-
-          <Select
-            name="subscription_plan_id"
-            className="mb-2"
-            onChange={props.handleChange}
-            options={plans.map((plan) => ({
-              value: plan.id,
-              label: plan.name,
-            }))}
-          />
-          <p className="mb-4 text-xs italic">
-            Configure more subscription plans{" "}
-            <Link
-              className="text-bold not-italic text-indigo-800 transition hover:text-indigo-700"
-              href="/billing/plans"
+            <Input
+              type="select"
+              name="subscription_plan_id"
+              label="Subscription Plan"
             >
-              here
-            </Link>
-            .
-          </p>
+              {plans.map((plan) => (
+                <option value={plan.id}>{plan.name}</option>
+              ))}
+            </Input>
 
-          <button type="submit">Create Billing Job</button>
+            {/* <p className="mb-4 text-xs italic">
+              Configure more subscription plans{" "}
+              <Link className="link" href="/billing/plans">
+                here
+              </Link>
+              .
+            </p> */}
+          </div>
+          <button className="btn" type="submit">
+            Create Billing Job
+          </button>
         </Form>
       )}
     </Formik>

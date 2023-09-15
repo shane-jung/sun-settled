@@ -1,11 +1,9 @@
+import { getSubscribers } from "@/lib/fetchData"
 import { Subscriber } from "@/types"
 import Link from "next/link"
 
 export default async function Page() {
-  const subscribers: Subscriber[] = await (
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/subscribers`)
-  ).json()
-  console.log(subscribers)
+  const subscribers: Subscriber[] = await getSubscribers({})
   return (
     <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2">
       <h3 className="mb-4 text-2xl">Subscribers</h3>
@@ -15,7 +13,7 @@ export default async function Page() {
       >
         Create New Subscriber
       </Link>
-      <div className="col-span-2 rounded border-2 bg-white p-4 shadow-md">
+      <div className="col-span-2 panel">
         <table>
           <thead className="text-left">
             <tr>
@@ -26,7 +24,7 @@ export default async function Page() {
           </thead>
           <tbody>
             {subscribers.slice(0, 5).map((subscriber: Subscriber) => (
-              <tr>
+              <tr key={subscriber.id}>
                 <td>
                   <Link
                     href={`/subscribers/${subscriber.id}`}
@@ -46,10 +44,10 @@ export default async function Page() {
           </tbody>
         </table>
       </div>
-      <div className="rounded border-2 bg-white p-4 shadow-md">
+      <div className="panel">
         <h3 className="mb-2 text-xl ">Scheduled Payments</h3>
       </div>
-      <div className="rounded border-2 bg-white p-4 shadow-md">
+      <div className="panel">
         <h3 className="mb-2 text-xl ">Todo</h3>
       </div>
     </div>

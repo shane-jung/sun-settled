@@ -1,50 +1,35 @@
 import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
 import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
+  const id = request.nextUrl.searchParams.get("id")
+  const include = request.nextUrl.searchParams.get("include")
+    ? { subscribers: true, readings: true }
+    : undefined
+
   let gardens
-  if (request.nextUrl.searchParams.get("id"))
+
+  if (id)
     gardens = await prisma.garden.findUnique({
       where: {
-        id: request.nextUrl.searchParams.get("id")!,
+        id: id,
       },
-      include: {
-        readings: true,
-        subscribers: true,
-      },
+      include: include,
     })
-  else gardens = await prisma.garden.findMany()
+  else
+    gardens = await prisma.garden.findMany({
+      include: include,
+    })
 
-  return new NextResponse(JSON.stringify(gardens), {
-    headers: {
-      "content-type": "application/json",
-    },
-  })
-}
-
-export async function PUT(request: NextRequest) {
-  const data = await request.json()
-  return new NextResponse(JSON.stringify(data), {
-    headers: {
-      "content-type": "application/json",
-    },
-  })
-  const garden = await prisma.garden.update({
-    where: {
-      id: data.id,
-    },
-    data,
-  })
+  if (gardens) return NextResponse.json(gardens)
+  else return NextResponse.json({ error: "No gardens found", status: 404 })
 }
 
 export async function POST(request: NextRequest) {
-  revalidatePath("http://localhost:3000/api/gardens")
+  revalidatePath("/api/gardens")
   const data = await request.json()
   const garden = await prisma.garden.create({ data })
-  return new NextResponse(JSON.stringify(garden), {
-    headers: {
-      "content-type": "application/json",
-    },
-  })
+  return NextResponse.json(garden)
 }

@@ -1,16 +1,38 @@
-import { Garden } from "@/types"
+import DashboardPanel from "@/components/DashboardPanel"
+import { Garden, GardenWithRelations } from "@/types"
 import { Metadata } from "next"
 import Link from "next/link"
 
-// const tempGardens = ["North", "Emerge"];
+const panels = [
+  {
+    title: "Subscribers",
+    action: <Link href="/gardens/[id]/subscribers">View All</Link>,
+    body: <p>Paragraph 1</p>,
+  },
+  {
+    title: "Production",
+    action: <Link href="/gardens/[id]/production">View All</Link>,
+    body: <p>Paragraph 1</p>,
+  },
+  {
+    title: "Subscriptions",
+    action: <Link href="/gardens/[id]/subscriptions">View All</Link>,
+    body: <p>Paragraph 1</p>,
+  },
+]
 
 export const metadata: Metadata = {
   title: "Community Solar Gardens | Sun Settled",
 }
 
 export default async function Page() {
-  const gardens: Garden[] = await (
-    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/gardens`)
+  const gardens: GardenWithRelations[] = await (
+    await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/gardens?include=true`,
+      {
+        next: { revalidate: 1 },
+      }
+    )
   ).json()
   console.log(gardens)
   return (
@@ -22,7 +44,7 @@ export default async function Page() {
       >
         Create New Garden
       </Link>
-      <div className="col-span-2 rounded border-2 bg-white p-4 shadow-md">
+      <div className="col-span-2 panel">
         <table>
           <thead className="text-left">
             <tr>
@@ -66,15 +88,26 @@ export default async function Page() {
           </tfoot>
         </table>
       </div>
-      <div className="rounded border-2 bg-white p-4 shadow-md">
-        <h3 className="mb-2 text-xl font-bold">Production</h3>
-      </div>
-      <div className="rounded border-2 bg-white p-4 shadow-md">
-        <h3 className="mb-2 text-xl font-bold">Scheduled Payments</h3>
-      </div>
-      <div className="rounded border-2 bg-white p-4 shadow-md">
-        <h3 className="mb-2 text-xl font-bold">Todo</h3>
-      </div>
+
+      {panels.map((panel) => (
+        <DashboardPanel>
+          <DashboardPanel.Title>{panel.title}</DashboardPanel.Title>
+          <DashboardPanel.Action>
+            <Link
+              href="/gardens/[id]/subscribers"
+              as={`/gardens/${1}/subscribers`}
+            >
+              View All
+            </Link>
+          </DashboardPanel.Action>
+
+          <DashboardPanel.Body>
+            <div>
+              <p>Paragraph 1</p>
+            </div>
+          </DashboardPanel.Body>
+        </DashboardPanel>
+      ))}
     </div>
   )
 }

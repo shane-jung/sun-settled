@@ -1,7 +1,7 @@
+import RouteLayout from "@/components/RouteLayout"
+import { getBillingJobs } from "@/lib/fetchData"
 import { BillingJob } from "@prisma/client"
 import React from "react"
-import RouteLayout from "@/app/RouteLayout"
-import { getBillingJobs } from "@/lib/fetchData"
 
 export default async function Layout({
   children,

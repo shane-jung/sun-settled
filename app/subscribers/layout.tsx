@@ -2,7 +2,7 @@ import List from "@/components/List"
 import { prisma } from "@/lib/prisma"
 import { Metadata } from "next"
 
-import RouteLayout from "../RouteLayout"
+import RouteLayout from "../../components/RouteLayout"
 
 export const metadata: Metadata = {
   title: "Subscribers | Sun Settled",

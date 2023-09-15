@@ -31,9 +31,12 @@ const months = [
 const monthObjects = months.map((month) => ({ name: month, value: null }))
 
 export default function GardenProduction({
-  garden,
+  readings,
 }: {
-  garden: GardenWithRelations
+  readings: {
+    date: Date
+    value: number
+  }[]
 }) {
   const error = console.error
   console.error = (...args: any) => {
@@ -43,7 +46,7 @@ export default function GardenProduction({
 
   const [year, setYear] = useState(new Date().getFullYear())
 
-  const data = garden.readings.map((reading: any) => ({
+  const data = readings.map((reading: any) => ({
     name: new Date(reading.startDate).toLocaleString("en", {
       month: "short",
     }),

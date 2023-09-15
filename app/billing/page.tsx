@@ -3,15 +3,15 @@ import Link from "next/link"
 export default function Page() {
   return (
     <div>
-      <h2 className="border-b-2">Billing</h2>
-      <p className="pb-12">
+      <h2 className="text-2xl">Billing</h2>
+      <p>
         Sun Settled simplifies the otherwise complicated process of billing for
         community solar gardens. We break the process into two pieces:
       </p>
 
-      <div className="grid grid-cols-2 gap-20 px-32">
-        <div className="border-2">
-          <h3 className=" border-b-2 bg-gray-200 py-4 pl-4">
+      <div className="grid grid-cols-2 gap-20 px-32 mt-12">
+        <div className="panel p-0">
+          <h3 className="text-xl font-medium border-b-2 bg-gray-200 py-4 pl-4">
             Subscription Plans
           </h3>
           <div className="p-4">
@@ -28,16 +28,15 @@ export default function Page() {
               "Annual Plan" that bills subscribers $1,000 per year.
             </p>
 
-            <Link
-              className="mx-auto my-2 block w-min whitespace-nowrap rounded-md border bg-indigo-500 p-3 text-white transition hover:bg-indigo-400"
-              href={"/billing/plans"}
-            >
+            <Link className="btn" href={"/billing/plans"}>
               Subscription Plans
             </Link>
           </div>
         </div>
-        <div className="border-2">
-          <h2 className="border-b-2 bg-gray-200 py-4 pl-4">Billing Jobs</h2>
+        <div className="panel p-0">
+          <h2 className="text-xl font-medium border-b-2 bg-gray-200 py-4 pl-4">
+            Billing Jobs
+          </h2>
           <div className="p-4">
             <p className="pb-4">
               A <span className="font-bold">billing job</span> defines{" "}
@@ -54,7 +53,7 @@ export default function Page() {
               should bill subscribers for the next 12 months.
             </p>
             <Link
-              className="mx-auto my-2 block w-min whitespace-nowrap rounded-md border bg-indigo-500 p-3 text-white transition hover:bg-indigo-400"
+              className="btn inline-block mx-auto self-center"
               href={"/billing/jobs/create"}
             >
               Schedule New Billing Job

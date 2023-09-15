@@ -1,17 +1,22 @@
 import GardenProduction from "@/components/GardenProduction"
-import { GardenWithRelations, Subscriber } from "@/types"
+import { getGarden } from "@/lib/fetchData"
+import {
+  GardenWithReadings,
+  GardenWithRelations,
+  Reading,
+  Subscriber,
+} from "@/types"
 import Image from "next/image"
 import Link from "next/link"
+import { notFound } from "next/navigation"
 import Skeleton from "react-loading-skeleton"
 
 export default async function Garden({ params }: { params: { id: string } }) {
-  const garden: GardenWithRelations = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/gardens?id=${params.id}`,
-    { next: { revalidate: 1 } }
-  ).then((res) => res.json())
+  const garden = await getGarden({ id: params.id, include: true })
 
-  const subscribers = garden?.subscribers
-  // const invoices = garden?.invoices
+  const subscribers: Subscriber[] = garden.subscribers
+  const readings: Reading[] = garden.readings
+
   return (
     <div>
       <div className="mb-2 text-sm">
@@ -23,23 +28,23 @@ export default async function Garden({ params }: { params: { id: string } }) {
 
       <h2 className="mb-4 text-2xl">{garden?.name}</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="rounded border-2 bg-white p-4 shadow-md">
+        <div className="panel">
           <h3 className="mb-2 text-xl font-medium">General</h3>
           <div className="flex">
             <h4 className="wrap text-center text-3xl">
-              {garden?.capacityDc.toString()}
+              {garden?.capacityDc?.toString()}
               <br />
               kW
             </h4>
             <Image
               src={"/capacity.png"}
               alt="Solar Panel Image"
-              width={64}
-              height={64}
+              width={100}
+              height={100}
             />
           </div>
         </div>
-        <div className="rounded border-2 bg-white p-4 shadow-md">
+        <div className="panel">
           <div className="flex justify-between">
             <h3 className="mb-2 text-xl font-medium">Subscribers</h3>
             <Link
@@ -84,17 +89,22 @@ export default async function Garden({ params }: { params: { id: string } }) {
           </table>
         </div>
 
-        <div className="h-96 relative rounded border-2 bg-white p-4 shadow-md">
+        <div className="h-96 relative panel">
           <div className="flex justify-between">
             <h3 className="mb-2 text-xl font-medium">Production History</h3>
             <Link href={`${garden.id}/production`} className="btn text-sm">
               Add Reading
             </Link>
           </div>
-          <GardenProduction garden={garden} />
+          <GardenProduction
+            readings={readings.map((reading: Reading) => ({
+              value: Number(reading.value),
+              date: reading.startDate,
+            }))}
+          />
         </div>
 
-        <div className="rounded border-2 bg-white p-4 shadow-md">
+        <div className="panel">
           <h3 className="mb-2 text-xl font-medium">Invoices</h3>
           <table>
             <thead className="text-left">

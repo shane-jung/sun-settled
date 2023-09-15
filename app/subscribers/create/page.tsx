@@ -1,13 +1,15 @@
+import { getGardens, getSubscriptionPlans } from "@/lib/fetchData"
 import { prisma } from "@/lib/prisma"
+
 import SubscriberForm from "./SubscriberForm"
 
 export default async function Page() {
-  const gardens = await fetch(`http://localhost:3000/api/gardens`).then((res) =>
-    res.json()
-  )
+  const gardens = await getGardens({ include: "false" })
+
+  const subscriptionPlans = await getSubscriptionPlans()
   return (
     <div className="container">
-      <SubscriberForm gardens={gardens} />
+      <SubscriberForm gardens={gardens} subscriptionPlans={subscriptionPlans} />
     </div>
   )
 }

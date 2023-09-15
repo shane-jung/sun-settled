@@ -1,89 +1,108 @@
-import { Field } from "formik"
-import { twMerge } from "tailwind-merge"
+import { ErrorMessage, Field } from "formik"
 import React from "react"
 
-export function Select({
-  className,
-  options,
-  onChange,
-  name,
-}: {
-  options: { value: string; label: string }[]
-  onChange: any
-  name: string
+interface FormElementProps {
+  label?: string
   className?: string
-}) {
+  type: string
+  name: string
+  required?: boolean
+  helper?: string
+  step?: string
+  min?: number
+  errors?: string
+  touched?: boolean
+  children?: React.ReactNode
+  datepicker?: boolean
+}
+
+interface classMap {
+  [key: string]: string
+}
+
+const classes: classMap = {
+  // dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500
+  select:
+    "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5",
+  text: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400",
+  email:
+    "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400",
+  number:
+    "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400",
+  textarea:
+    "block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500",
+  date: "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5",
+}
+
+function Label({ value, name }: { value?: string; name: string }) {
+  if (!value) return null
   return (
-    <select
-      className={twMerge(
-        "mb-4 block h-12 w-80 rounded border border-gray-200 p-1",
-        className
-      )}
-      name={name}
-      id={name}
-      onChange={onChange}
-      defaultValue={"default"}
-      required
+    <label
+      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      htmlFor={name}
     >
-      <option value="default" disabled>
-        Select Option
-      </option>
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
+      {value}
+    </label>
   )
 }
 
-export function FormGrid({ children }: { children: any }) {
+function Helper({ value }: { value?: string }) {
+  if (!value) return null
   return (
-    <div className="grid w-[80%] grid-cols-2 gap-x-32 gap-y-10 border border-slate-200 p-8 px-12 shadow-md">
+    <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">{value}</p>
+  )
+}
+
+function FormElement({ name, label, children, helper }: FormElementProps) {
+  return (
+    <div className="relative w-full mb-8">
+      <Label value={label} name={name} />
+
       {children}
+      <ErrorMessage
+        name={name}
+        component="p"
+        className="text-red-400 text-xs translate-y-1 absolute"
+      />
+      <Helper value={helper} />
     </div>
   )
 }
 
-export function TextField({
-  required = false,
-  type = "text",
-  name,
-  className,
-  placeholder = "",
-}: {
-  type?: string
-  required?: boolean
-  name: string
-  className?: string
-  placeholder?: string
-}) {
+export function Input(props: FormElementProps) {
+  const { name, type, className } = props
+  const styles = `${classes[type]} ${className}`
   return (
-    <Field
-      className={twMerge("mb-4 block rounded border p-2", className)}
-      type={type}
-      name={name}
-      placeholder={placeholder}
-      required={required}
-    />
+    <FormElement {...props}>
+      {{
+        select: (
+          <Field component="select" id={name} className={styles} {...props}>
+            <option value="default" disabled>
+              Select Option
+            </option>
+            {props.children}
+          </Field>
+        ),
+        date: <Field id={name} className={styles} {...props} />,
+        textarea: (
+          <Field component="textarea" id={name} className={styles} {...props} />
+        ),
+      }[type!] || <Field id={name} className={styles} {...props} />}
+    </FormElement>
   )
 }
 
-export default function Label({
-  htmlFor,
-  children,
-  className,
-}: {
-  htmlFor: string
-  children: React.ReactNode
-  className?: string
-}) {
-  return (
-    <label
-      className={twMerge("mb-1 block text-sm", className)}
-      htmlFor={htmlFor}
-    >
-      {children}
-    </label>
-  )
-}
+// export function InputWithAddon({
+//   AddOn,
+//   ...props
+// }: {
+//   props: FormElementProps
+//   AddOn: React.ReactNode
+// }) {
+//   return (
+//     <div className="flex">
+//       <AddOn />
+//       <Input {...props} />
+//     </div>
+//   )
+// }

@@ -1,7 +1,7 @@
 import { Garden } from "@prisma/client"
 import { Metadata } from "next"
 
-import RouteLayout from "../RouteLayout"
+import RouteLayout from "../../components/RouteLayout"
 
 export const metadata: Metadata = {
   title: "Community Solar Gardens | Sun Settled",

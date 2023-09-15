@@ -1,14 +1,26 @@
 import {
-  Prisma,
   Garden as GardenPrisma,
-  Subscriber as SubscriberPrisma,
+  Prisma,
   Reading as ReadingPrisma,
+  Subscriber as SubscriberPrisma,
   SubscriptionPlan as SubscriptionPlanPrisma,
 } from "@prisma/client"
 
 export type GardenWithRelations = Prisma.GardenGetPayload<{
   include: {
     subscribers: true
+    readings: true
+  }
+}>
+
+export type GardenWithSubscribers = Prisma.GardenGetPayload<{
+  include: {
+    subscribers: true
+  }
+}>
+
+export type GardenWithReadings = Prisma.GardenGetPayload<{
+  include: {
     readings: true
   }
 }>

@@ -1,14 +1,21 @@
+import RouteLayout from "@/components/RouteLayout"
+import { getSubscriptionPlans } from "@/lib/fetchData"
 import { SubscriptionPlan } from "@prisma/client"
 import React from "react"
-import RouteLayout from "@/app/RouteLayout"
-import { getSubscriptionPlans } from "@/lib/fetchData"
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const plans: SubscriptionPlan[] = await getSubscriptionPlans()
+  const plans: SubscriptionPlan[] = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/plans`,
+    {
+      next: {
+        tags: ["plans"],
+      },
+    }
+  ).then((res) => res.json())
   return (
     <RouteLayout
       items={plans}

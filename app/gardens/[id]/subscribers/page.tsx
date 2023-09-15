@@ -1,3 +1,4 @@
+import { getGarden } from "@/lib/fetchData"
 import { GardenWithRelations } from "@/types"
 
 export default async function Subscribers({
@@ -5,10 +6,8 @@ export default async function Subscribers({
 }: {
   params: { id: string }
 }) {
-  const garden: GardenWithRelations = await fetch(
-    `http://localhost:3000/api/gardens?id=${params.id}`,
-    { next: { revalidate: 1 } }
-  ).then((res) => res.json())
+  const garden: GardenWithRelations = await getGarden({ id: params.id })
+  console.log(garden)
 
   return <h2>hello</h2>
 }

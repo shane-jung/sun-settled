@@ -1,13 +1,28 @@
 "use client"
 
-import Label, { TextField } from "@/components/forms"
+import { Input } from "@/components/forms"
 import { Form, Formik } from "formik"
-import { revalidatePath } from "next/cache"
+import { redirect, useRouter } from "next/navigation"
+import * as Yup from "yup"
+
+const validationSchema = Yup.object({
+  name: Yup.string()
+    .min(8, "Please enter a name between 8 and 100 characters")
+    .max(100, "Please enter a name between 8 and 100 characters")
+    .required("Field is required"),
+  capacityDc: Yup.number()
+    .min(1, "Capacity must be positive")
+    .max(10000000, "Please enter a valid capacity")
+    .required("Field is required"),
+})
 
 export default function GardenForm() {
+  const router = useRouter()
   return (
     <div className="container">
       <Formik
+        validateOnChange
+        validationSchema={validationSchema}
         initialValues={{
           name: "",
           capacityDc: "",
@@ -19,19 +34,22 @@ export default function GardenForm() {
           })
 
           if (res.ok) {
-            window.location.href = `/gardens/${(await res.json()).id}`
+            console.log(res.body)
+            router.push("/gardens")
           }
-
-          revalidatePath("/api/gardens")
         }}
       >
-        <Form>
-          <h1 className="mb-4 text-2xl">Create New Garden</h1>
-          <Label htmlFor="name">Garden Name</Label>
-          <TextField name="name" required />
-
-          <Label htmlFor="capacityDc">Capacity DC</Label>
-          <TextField name="capacityDc" required />
+        <Form className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-8 border-gray-900/10 border-b-2">
+          <div>
+            <h2 className="font-semibold text-xl mb-2">Create New Garden</h2>
+            <p className="mt-0 text-gray-600">
+              Use this form to create a new garden. You'll have the opportunity
+              to add subscribers, and production data history later, if you have
+              that information already.
+            </p>
+          </div>
+          <Input label="Garden Name" name="name" type="text" />
+          <Input label="Garden Capacity" name="capacityDc" type="number" />
 
           <button className="btn" type="submit">
             Save

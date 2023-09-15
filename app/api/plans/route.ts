@@ -1,18 +1,25 @@
-import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
+import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
-  const data = await prisma.subscriptionPlan.findMany()
-  return new NextResponse(JSON.stringify(data), {
-    headers: {
-      "content-type": "application/json",
-    },
-  })
+  const id = request.nextUrl.searchParams.get("id")
+  let data
+
+  if (id)
+    data = await prisma.subscriptionPlan.findUnique({
+      where: {
+        id: id,
+      },
+    })
+  else {
+    data = await prisma.subscriptionPlan.findMany()
+  }
+
+  return NextResponse.json(data)
 }
 
 export async function POST(request: NextRequest) {
   const data = await request.json()
-  console.log(data)
   const subscriptionPlan = await prisma.subscriptionPlan.create({
     data: {
       ...data,
@@ -20,9 +27,6 @@ export async function POST(request: NextRequest) {
       isShareDependent: Boolean(data.isShareDependent) || false,
     },
   })
-  return new NextResponse(JSON.stringify(subscriptionPlan), {
-    headers: {
-      "content-type": "application/json",
-    },
-  })
+
+  return NextResponse.json(subscriptionPlan)
 }

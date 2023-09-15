@@ -1,37 +1,26 @@
-import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import {
-  SchedulerClient,
   CreateScheduleCommand,
+  SchedulerClient,
 } from "@aws-sdk/client-scheduler"
+import { NextRequest, NextResponse } from "next/server"
 
 export async function GET(request: NextRequest) {
-  //get the search params from the request
+  const id = request.nextUrl.searchParams.get("id")
   let billingJobs
-  if (request.nextUrl.searchParams.get("id"))
+  if (id)
     billingJobs = await prisma.billingJob.findUnique({
       where: {
-        id: request.nextUrl.searchParams.get("id")!,
+        id: id,
       },
     })
   else billingJobs = await prisma.billingJob.findMany()
 
-  console.log(billingJobs)
-  return new NextResponse(JSON.stringify(billingJobs))
+  return NextResponse.json(billingJobs)
 }
 
 export async function POST(request: NextRequest) {
   const data = await request.json()
-
-  console.log(data)
-  const create_time = new Date()
-
-  //   const job = await prisma.billingJob.create({
-  //     data: {
-  //       ...data,
-  //       create_time,
-  //     },
-  //   })
 
   const config = {
     region: "us-east-2",
@@ -162,7 +151,5 @@ export async function POST(request: NextRequest) {
   const command = new CreateScheduleCommand(input)
   const response = await client.send(command)
 
-  return NextResponse.json({
-    message: "Hello, world!",
-  })
+  return NextResponse.json(response)
 }

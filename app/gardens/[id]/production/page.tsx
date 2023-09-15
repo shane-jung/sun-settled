@@ -1,3 +1,4 @@
+import { getReadings } from "@/lib/fetchData"
 import { GardenWithRelations } from "@/types"
 import dynamic from "next/dynamic"
 
@@ -9,14 +10,12 @@ const GardenProduction = dynamic(
 )
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const readings = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/reading?id=${params.id}`
-  ).then((res) => res.json())
+  const readings = await getReadings({ id: params.id })
 
   return (
     <div className="p-4 bg-white rounded shadow-sm">
       {/* <GardenProduction garden={params.id} /> */}
-      <h3 className="mb-2 text-xl font-medium">Production</h3>
+      <h3 className="mb-2 text-xl font-medium">Production History</h3>
       <ReadingsTable readings={readings} gardenId={params.id} />
     </div>
   )

@@ -1,6 +1,5 @@
 "use client"
-import Link from "next/link"
-import { Fragment } from "react"
+
 import { Disclosure, Menu, Transition } from "@headlessui/react"
 import {
   HomeIcon,
@@ -10,6 +9,8 @@ import {
   Sun,
   Users,
 } from "lucide-react"
+import Link from "next/link"
+import { Fragment } from "react"
 
 const navigation: {
   name: string
@@ -27,7 +28,7 @@ const navigation: {
     name: "Community Solar Gardens",
     href: "/gardens",
     icon: Sun,
-    color: "text-yellow-500",
+    color: "text-yellow-300",
   },
   {
     name: "Subscribers",
@@ -39,7 +40,7 @@ const navigation: {
     name: "Billing",
     href: "/billing",
     icon: Receipt,
-    color: "text-green-500",
+    color: "text-green-400",
   },
   {
     name: "Invoices",
@@ -76,13 +77,11 @@ export default function Example() {
                         key={item.href}
                         href={item.href}
                         className={classNames(
-                          " flex flex-row whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "transition flex flex-row whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-blue-400",
                           item.color
                         )}
                       >
-                        <item.icon
-                          className={classNames("mr-3 h-5 w-5", item.color)}
-                        />
+                        <item.icon className={classNames("mr-3 h-5 w-5")} />
                         {item.name}
                       </Link>
                     ))}

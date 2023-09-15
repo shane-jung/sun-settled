@@ -6,7 +6,6 @@ export default async function Page({
 }: {
   params: { id: string }
 }) {
-  // console.log(id)
   const subscriber = await getSubscriber({ id })
   console.log(subscriber.stripeCustomerId)
   const invoices = await stripe.invoices.list({

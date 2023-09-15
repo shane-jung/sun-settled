@@ -1,7 +1,7 @@
-import React from "react"
-import RouteLayout from "../RouteLayout"
 import stripe from "@/lib/stripe"
-import Navigation from "@/components/Navigation"
+import React from "react"
+
+import RouteLayout from "../../components/RouteLayout"
 
 export default async function layout({
   children,

@@ -14,13 +14,7 @@ export default function RouteLayout({
   return (
     <div className="">
       <div className="bg-white border-r-2 h-full fixed">
-        <List
-          pathName={pathName}
-          items={items.map((item) => ({
-            id: item.id,
-            name: item.name,
-          }))}
-        />
+        <List pathName={pathName} items={items} />
       </div>
       <div className="h-full  pl-[calc(350px+1rem)] pr-4 py-8 ">{children}</div>
     </div>
