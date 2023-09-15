@@ -1,4 +1,4 @@
-import { getReadings } from "@/lib/fetchData"
+import { getAllReadings } from "@/lib/readings"
 import { GardenWithRelations } from "@/types"
 import dynamic from "next/dynamic"
 
@@ -10,7 +10,7 @@ const GardenProduction = dynamic(
 )
 
 export default async function Page({ params }: { params: { id: string } }) {
-  const readings = await getReadings({ id: params.id })
+  const readings = await getAllReadings({ gardenId: params.id })
 
   return (
     <div className="p-4 bg-white rounded shadow-sm">

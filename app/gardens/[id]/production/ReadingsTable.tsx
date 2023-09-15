@@ -2,7 +2,6 @@
 
 import DeleteButton from "@/components/DeleteButton"
 import { Input } from "@/components/forms"
-import { deleteReading } from "@/lib/fetchData"
 import { Reading } from "@/types"
 import { Form, Formik } from "formik"
 import { Edit, Trash } from "lucide-react"

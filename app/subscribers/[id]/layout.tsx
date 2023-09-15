@@ -1,5 +1,5 @@
 import Navigation from "@/components/Navigation"
-import { getSubscriber } from "@/lib/fetchData"
+import { getSubscriber } from "@/lib/subscribers"
 import Link from "next/link"
 
 // const navLinks = [

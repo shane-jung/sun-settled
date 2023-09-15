@@ -1,3 +1,4 @@
+import { getAllGardens } from "@/lib/gardens"
 import { Garden } from "@prisma/client"
 import { Metadata } from "next"
 
@@ -13,12 +14,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode
 }) {
-  const gardens: Garden[] = await fetch("http://localhost:3000/api/gardens", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }).then((res) => res.json())
+  const gardens: Garden[] = await getAllGardens({ include: {} })
 
   return (
     <RouteLayout items={gardens} label="Garden" pathName={"/gardens/"}>

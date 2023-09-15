@@ -1,15 +1,19 @@
-import { getGardens, getSubscriptionPlans } from "@/lib/fetchData"
-import { prisma } from "@/lib/prisma"
+import { getAllGardens } from "@/lib/gardens"
+import { getAllSubscriptionPlans } from "@/lib/plans"
+import { Garden, GardenWithRelations } from "@/types"
 
 import SubscriberForm from "./SubscriberForm"
 
-export default async function Page() {
-  const gardens = await getGardens({ include: "false" })
-
-  const subscriptionPlans = await getSubscriptionPlans()
+const CreateSubscriberPage = async () => {
+  const gardens = await getAllGardens({
+    include: { subscribers: true, readings: true },
+  })
+  const subscriptionPlans = await getAllSubscriptionPlans()
   return (
     <div className="container">
       <SubscriberForm gardens={gardens} subscriptionPlans={subscriptionPlans} />
     </div>
   )
 }
+
+export default CreateSubscriberPage

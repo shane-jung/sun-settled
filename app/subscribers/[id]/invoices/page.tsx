@@ -1,5 +1,5 @@
-import { getSubscriber } from "@/lib/fetchData"
 import stripe from "@/lib/stripe"
+import { getSubscriber } from "@/lib/subscribers"
 
 export default async function Page({
   params: { id },
@@ -7,7 +7,8 @@ export default async function Page({
   params: { id: string }
 }) {
   const subscriber = await getSubscriber({ id })
-  console.log(subscriber.stripeCustomerId)
+  if (!subscriber) return null
+
   const invoices = await stripe.invoices.list({
     customer: subscriber.stripeCustomerId,
   })

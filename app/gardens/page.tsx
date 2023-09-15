@@ -1,4 +1,5 @@
 import DashboardPanel from "@/components/DashboardPanel"
+import { getAllGardens } from "@/lib/gardens"
 import { Garden, GardenWithRelations } from "@/types"
 import { Metadata } from "next"
 import Link from "next/link"
@@ -26,15 +27,7 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
-  const gardens: GardenWithRelations[] = await (
-    await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/gardens?include=true`,
-      {
-        next: { revalidate: 1 },
-      }
-    )
-  ).json()
-  console.log(gardens)
+  const gardens: Garden[] = await getAllGardens({ include: {} })
   return (
     <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2">
       <h3 className="mb-4 text-2xl">Gardens</h3>

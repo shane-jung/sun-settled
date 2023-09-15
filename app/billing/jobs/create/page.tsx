@@ -1,14 +1,12 @@
-import { getGardens, getSubscriptionPlans } from "@/lib/fetchData"
+import { getAllGardens } from "@/lib/gardens"
+import { getAllSubscriptionPlans } from "@/lib/plans"
 
 import BillingJobForm from "./BillingJobForm"
 
 export default async function Page() {
-  const gardens = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/gardens`
-  ).then((res) => res.json())
-  console.log(gardens)
-
-  const plans = await getSubscriptionPlans()
-  console.log(plans)
+  const gardens = await getAllGardens({
+    include: {},
+  })
+  const plans = await getAllSubscriptionPlans()
   return <BillingJobForm gardens={gardens} plans={plans} />
 }

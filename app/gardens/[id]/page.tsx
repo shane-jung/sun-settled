@@ -1,21 +1,17 @@
 import GardenProduction from "@/components/GardenProduction"
-import { getGarden } from "@/lib/fetchData"
-import {
-  GardenWithReadings,
-  GardenWithRelations,
-  Reading,
-  Subscriber,
-} from "@/types"
+import { getGarden } from "@/lib/gardens"
+import { Garden, GardenWithRelations, Reading, Subscriber } from "@/types"
 import Image from "next/image"
 import Link from "next/link"
-import { notFound } from "next/navigation"
 import Skeleton from "react-loading-skeleton"
 
 export default async function Garden({ params }: { params: { id: string } }) {
-  const garden = await getGarden({ id: params.id, include: true })
-
-  const subscribers: Subscriber[] = garden.subscribers
-  const readings: Reading[] = garden.readings
+  const garden = await getGarden({
+    id: params.id,
+    include: { subscribers: true, readings: true },
+  })
+  const subscribers = garden.subscribers || []
+  const readings = garden.readings || []
 
   return (
     <div>
@@ -64,7 +60,7 @@ export default async function Garden({ params }: { params: { id: string } }) {
               </tr>
             </thead>
             <tbody>
-              {subscribers.map((subscriber: Subscriber) => (
+              {subscribers?.map((subscriber: Subscriber) => (
                 <tr>
                   <td>
                     <Link
@@ -97,7 +93,7 @@ export default async function Garden({ params }: { params: { id: string } }) {
             </Link>
           </div>
           <GardenProduction
-            readings={readings.map((reading: Reading) => ({
+            readings={readings?.map((reading: Reading) => ({
               value: Number(reading.value),
               date: reading.startDate,
             }))}

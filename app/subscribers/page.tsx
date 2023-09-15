@@ -1,9 +1,9 @@
-import { getSubscribers } from "@/lib/fetchData"
+import { getAllSubscribers } from "@/lib/subscribers"
 import { Subscriber } from "@/types"
 import Link from "next/link"
 
 export default async function Page() {
-  const subscribers: Subscriber[] = await getSubscribers({})
+  const subscribers: Subscriber[] = await getAllSubscribers()
   return (
     <div className="relative grid grid-cols-1 gap-6 md:grid-cols-2">
       <h3 className="mb-4 text-2xl">Subscribers</h3>

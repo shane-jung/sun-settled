@@ -3,7 +3,7 @@ import React from "react"
 
 import RouteLayout from "../../components/RouteLayout"
 
-export default async function layout({
+export default async function Layout({
   children,
 }: {
   children: React.ReactNode

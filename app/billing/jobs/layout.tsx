@@ -1,5 +1,5 @@
 import RouteLayout from "@/components/RouteLayout"
-import { getBillingJobs } from "@/lib/fetchData"
+import { getAllBillingJobs } from "@/lib/jobs"
 import { BillingJob } from "@prisma/client"
 import React from "react"
 
@@ -8,7 +8,7 @@ export default async function Layout({
 }: {
   children: React.ReactNode
 }) {
-  const plans: BillingJob[] = await getBillingJobs()
+  const plans: BillingJob[] = await getAllBillingJobs()
   return (
     <RouteLayout items={plans} label="Billing Job" pathName="/billing/jobs/">
       {children}

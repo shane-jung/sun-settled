@@ -1,4 +1,4 @@
-import { getSubscriber } from "@/lib/fetchData"
+import { getSubscriber } from "@/lib/subscribers"
 import { SubscriberWithRelations } from "@/types"
 
 interface Props {
@@ -7,7 +7,7 @@ interface Props {
   }
 }
 export default async function Page({ params }: Props) {
-  const subscriber: SubscriberWithRelations = await getSubscriber({
+  const subscriber = await getSubscriber({
     id: params.id,
   })
   return <p>Hello</p>
