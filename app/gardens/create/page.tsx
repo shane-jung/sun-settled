@@ -1,6 +1,6 @@
 "use client"
 
-import { Input } from "@/components/forms"
+import { NumberInput, TextInput } from "@/components/Forms/Inputs"
 import { Form, Formik } from "formik"
 import { redirect, useRouter } from "next/navigation"
 import * as Yup from "yup"
@@ -48,10 +48,15 @@ export default function GardenForm() {
               that information already.
             </p>
           </div>
-          <Input label="Garden Name" name="name" type="text" />
-          <Input label="Garden Capacity" name="capacityDc" type="number" />
 
-          <button className="btn" type="submit">
+          <TextInput name="name" type="text" />
+          <NumberInput
+            label="Garden Capacity"
+            name="capacityDc"
+            type="number"
+          />
+
+          <button className="btn btn-primary" type="submit">
             Save
           </button>
         </Form>

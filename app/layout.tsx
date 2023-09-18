@@ -26,16 +26,10 @@ export default function RootLayout({
           <meta name="description" content="Sun Settled" />
           <meta name="author" content="Sun Settled" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css"
-            rel="stylesheet"
-          />
         </head>
         <body className="bg-gray-100">
           <TopBar />
           <div className="pt-16 min-h-[100vh]">{children}</div>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/datepicker.min.js"></script>
         </body>
       </html>
     </AuthProvider>

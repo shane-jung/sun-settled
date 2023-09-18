@@ -1,4 +1,5 @@
-import GardenProduction from "@/components/GardenProduction"
+import {GardenProduction} from "@/components/Charts"
+import DashboardPanel from "@/components/DashboardPanel"
 import { getGarden } from "@/lib/gardens"
 import { Garden, GardenWithRelations, Reading, Subscriber } from "@/types"
 import Image from "next/image"
@@ -24,25 +25,22 @@ export default async function Garden({ params }: { params: { id: string } }) {
 
       <h2 className="mb-4 text-2xl">{garden?.name}</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <div className="panel">
-          <h3 className="mb-2 text-xl font-medium">General</h3>
-          <div className="flex">
-            <h4 className="wrap text-center text-3xl">
-              {garden?.capacityDc?.toString()}
-              <br />
-              kW
-            </h4>
-            <Image
-              src={"/capacity.png"}
-              alt="Solar Panel Image"
-              width={100}
-              height={100}
-            />
-          </div>
-        </div>
-        <div className="panel">
-          <div className="flex justify-between">
-            <h3 className="mb-2 text-xl font-medium">Subscribers</h3>
+        <DashboardPanel>
+          <DashboardPanel.Title>General</DashboardPanel.Title>
+         <DashboardPanel.Body>
+            <div className="flex">
+              <h4 className="wrap text-center text-3xl">
+                {garden?.capacityDc?.toString()}
+                <br />
+                kW
+              </h4>
+
+            </div>
+         </DashboardPanel.Body>
+        </DashboardPanel>
+        <DashboardPanel>
+          <DashboardPanel.Title>Subscribers</DashboardPanel.Title>
+          <DashboardPanel.Action>
             <Link
               href="/gardens/[id]/subscribers"
               as={`/gardens/${params.id}/subscribers`}
@@ -50,91 +48,65 @@ export default async function Garden({ params }: { params: { id: string } }) {
             >
               View All
             </Link>
-          </div>
-          <table>
-            <thead className="text-left">
-              <tr>
-                <th>Subscriber Name</th>
-                <th>Allocation (kW)</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {subscribers?.map((subscriber: Subscriber) => (
+            </DashboardPanel.Action>
+            
+            
+          <DashboardPanel.Body>
+            <table>
+              <thead className="text-left">
                 <tr>
-                  <td>
-                    <Link
-                      href={`/subscribers/${subscriber.id}`}
-                      className="link "
-                    >
-                      {subscriber.name}
-                    </Link>
-                  </td>
-                  <td>{subscriber.allocation.toString()}</td>
-                  <td>
-                    <Link
-                      href={`/subscribers/${subscriber.id}`}
-                      className="link"
-                    >
-                      View
-                    </Link>
-                  </td>
+                  <th>Subscriber Name</th>
+                  <th>Allocation (kW)</th>
+                  <th />
                 </tr>
-              )) || <Skeleton />}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {subscribers?.map((subscriber: Subscriber) => (
+                  <tr>
+                    <td>
+                      <Link
+                        href={`/subscribers/${subscriber.id}`}
+                        className="link "
+                      >
+                        {subscriber.name}
+                      </Link>
+                    </td>
+                    <td>{subscriber.allocation.toString()}</td>
+                    <td>
+                      <Link
+                        href={`/subscribers/${subscriber.id}`}
+                        className="link"
+                      >
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </DashboardPanel.Body>
+        </DashboardPanel>
 
-        <div className="h-96 relative panel">
-          <div className="flex justify-between">
-            <h3 className="mb-2 text-xl font-medium">Production History</h3>
-            <Link href={`${garden.id}/production`} className="btn text-sm">
+        <DashboardPanel className="col-span-2">
+          <DashboardPanel.Title>Production</DashboardPanel.Title>
+          <DashboardPanel.Action>
+            <Link href={`${garden.id}/production`} className="btn btn-primary text-sm">
               Add Reading
             </Link>
-          </div>
+          </DashboardPanel.Action>
+                  <DashboardPanel.Body>
           <GardenProduction
-            readings={readings?.map((reading: Reading) => ({
-              value: Number(reading.value),
-              date: reading.startDate,
+            readings={readings.map((reading: Reading) => ({
+              name: new Date(reading.startDate).toLocaleString("default", {
+                month: "short",
+              }),
+              value: reading.value,
             }))}
-          />
-        </div>
+            categories={ ["value"] }
+            />
+          </DashboardPanel.Body>
+        </DashboardPanel>
 
-        <div className="panel">
-          <h3 className="mb-2 text-xl font-medium">Invoices</h3>
-          <table>
-            <thead className="text-left">
-              <tr>
-                <th>Invoice Name</th>
-                <th>Amount Due</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {subscribers.map((subscriber: Subscriber) => (
-                <tr>
-                  <td>
-                    <Link
-                      href={`/subscribers/${subscriber.id}`}
-                      className="link "
-                    >
-                      {subscriber.name}
-                    </Link>
-                  </td>
-                  <td>{subscriber.allocation.toString()}</td>
-                  <td>
-                    <Link
-                      href={`/subscribers/${subscriber.id}`}
-                      className="link"
-                    >
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   )

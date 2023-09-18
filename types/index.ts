@@ -6,12 +6,13 @@ import {
   SubscriptionPlan as SubscriptionPlanPrisma,
 } from "@prisma/client"
 
-export type GardenWithRelations = Prisma.GardenGetPayload<{
-  include: {
-    subscribers: true
-    readings: true
-  }
-}>
+const gardenWithRelations = Prisma.validator<Prisma.GardenArgs>()({
+  include: { subscribers: true, readings: true },
+})
+
+export type GardenWithRelations = Prisma.GardenGetPayload<
+  typeof gardenWithRelations
+>
 
 export type GardenWithSubscribers = Prisma.GardenGetPayload<{
   include: {

@@ -9,7 +9,7 @@ export default async function Page() {
       <h3 className="mb-4 text-2xl">Subscribers</h3>
       <Link
         href="/subscribers/create"
-        className="btn absolute right-0 top-0 text-sm"
+        className="btn btn-primary absolute right-0 top-0 text-sm"
       >
         Create New Subscriber
       </Link>
@@ -18,7 +18,9 @@ export default async function Page() {
           <thead className="text-left">
             <tr>
               <th>Subscriber Name</th>
-              <th>Capacity (kW)</th>
+              <th>Garden</th>
+              <th>Allocation (kW)</th>
+
               <th />
             </tr>
           </thead>
@@ -31,6 +33,14 @@ export default async function Page() {
                     className="link "
                   >
                     {subscriber.name}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    href={`/gardens/${subscriber.gardenId}`}
+                    className="link "
+                  >
+                    {subscriber.gardenId}
                   </Link>
                 </td>
                 <td>{subscriber.allocation.toString()}</td>

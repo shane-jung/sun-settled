@@ -28,7 +28,7 @@ export default function Page() {
               "Annual Plan" that bills subscribers $1,000 per year.
             </p>
 
-            <Link className="btn" href={"/billing/plans"}>
+            <Link className="btn btn-primary" href={"/billing/plans"}>
               Subscription Plans
             </Link>
           </div>
@@ -53,7 +53,7 @@ export default function Page() {
               should bill subscribers for the next 12 months.
             </p>
             <Link
-              className="btn inline-block mx-auto self-center"
+              className="btn btn-primary inline-block mx-auto self-center"
               href={"/billing/jobs/create"}
             >
               Schedule New Billing Job

@@ -6,9 +6,10 @@ import SubscriberForm from "./SubscriberForm"
 
 const CreateSubscriberPage = async () => {
   const gardens = await getAllGardens({
-    include: { subscribers: true, readings: true },
+    include: {},
   })
   const subscriptionPlans = await getAllSubscriptionPlans()
+
   return (
     <div className="container">
       <SubscriberForm gardens={gardens} subscriptionPlans={subscriptionPlans} />

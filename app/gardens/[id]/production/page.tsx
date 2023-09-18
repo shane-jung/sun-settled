@@ -4,10 +4,9 @@ import dynamic from "next/dynamic"
 
 import ReadingsTable from "./ReadingsTable"
 
-const GardenProduction = dynamic(
-  () => import("@/components/GardenProduction"),
-  { ssr: false }
-)
+const GardenProduction = dynamic(() => import("@/components/Charts"), {
+  ssr: false,
+})
 
 export default async function Page({ params }: { params: { id: string } }) {
   const readings = await getAllReadings({ gardenId: params.id })

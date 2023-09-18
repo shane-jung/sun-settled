@@ -21,8 +21,8 @@ const pages = [
 
 export default function Home() {
   return (
-    <div>
-      <h2 className="mb-8 text-2xl">Dashboard</h2>
+    <div className="p-8">
+      <h2 className="mb-8 text-2xl">Welcome, Shane!</h2>
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {pages.map((page: any) => (
           <div className="panel">

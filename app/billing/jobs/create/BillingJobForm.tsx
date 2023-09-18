@@ -1,9 +1,14 @@
 "use client"
 
-import { Input } from "@/components/forms"
+import {
+  DateInput,
+  Select,
+  TextInput,
+  TimeInput,
+} from "@/components/Forms/Inputs"
+import { Label } from "@/components/Forms/Label"
 import { Garden, SubscriptionPlan } from "@/types"
 import { Form, Formik } from "formik"
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import React from "react"
 import * as Yup from "yup"
@@ -35,7 +40,7 @@ export default function BillingJobForm({
       validationSchema={validationSchema}
       initialValues={{
         scheduled_date: "",
-        scheduled_time: "09:00",
+        scheduled_time: "",
         garden_id: "",
         subscription_plan_id: "",
         end_date: "",
@@ -54,49 +59,36 @@ export default function BillingJobForm({
     >
       {(props) => (
         <Form>
-          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-12 border-gray-900/10 border-b-2">
+          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-4 border-gray-900/10 border-b-2">
             <div>
               <h2 className="font-semibold text-xl mb-2">New Billing Job</h2>
             </div>
-            <Input type="text" name="name" label="Billing Job Name" />
+            <TextInput type="text" name="name" label="Billing Job Name" />
 
-            <Input
-              type="date"
-              name="scheduled_date"
-              label="Start Date"
-              helper="First billing date for this job. Subsequent billing dates will be
-            occur on the same day of the month."
-            />
+            <Label htmlFor="scheduled_date">Billing Date</Label>
+            <DateInput name="scheduled_date" />
 
-            <Input type="date" name="end_date" label="End Date" />
+            <Label htmlFor="end_date">End Date</Label>
+            <DateInput name="end_date" />
 
-            <Input type="time" name="scheduled_time" label="Billing Time" />
+            <Label htmlFor="scheduled_time">Billing Time</Label>
+            <TimeInput type="time" name="scheduled_time" label="Billing Time" />
 
-            <Input type="select" label="Garden" name="garden_id">
+            <Label htmlFor="garden_id">Garden</Label>
+            <Select type="select" name="garden_id">
               {gardens.map((garden) => (
                 <option value={garden.id}>{garden.name}</option>
               ))}
-            </Input>
+            </Select>
 
-            <Input
-              type="select"
-              name="subscription_plan_id"
-              label="Subscription Plan"
-            >
+            <Label htmlFor="subscription_plan_id">Subscription Plan</Label>
+            <Select type="select" name="subscription_plan_id">
               {plans.map((plan) => (
                 <option value={plan.id}>{plan.name}</option>
               ))}
-            </Input>
-
-            {/* <p className="mb-4 text-xs italic">
-              Configure more subscription plans{" "}
-              <Link className="link" href="/billing/plans">
-                here
-              </Link>
-              .
-            </p> */}
+            </Select>
           </div>
-          <button className="btn" type="submit">
+          <button className="btn btn-primary" type="submit">
             Create Billing Job
           </button>
         </Form>

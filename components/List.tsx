@@ -1,6 +1,7 @@
 "use client"
-import { usePathname } from "next/navigation"
+
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
 export default function List({
   pathName,
@@ -13,7 +14,7 @@ export default function List({
 }) {
   const pathname = usePathname()
   return (
-    <ul role="list" className="min-w-[350px] divide-y divide-gray-200">
+    <ul role="list" className="min-w-[250px] divide-y divide-gray-200 text-xs">
       {items.map((item) => (
         <li key={item.id} className="w-full gap-x-4 first-line:gap-x-4">
           <Link

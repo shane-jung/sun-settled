@@ -4,6 +4,6 @@ import React from "react"
 
 export default async function Page() {
   const invoices = await stripe.invoices.list()
-  console.log(invoices)
+  // console.log(invoices)
   return <p>Invoices</p>
 }

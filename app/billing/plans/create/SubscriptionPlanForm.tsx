@@ -1,6 +1,8 @@
 "use client"
 
-import { Input } from "@/components/forms"
+import { Helper } from "@/components/Forms/Helper"
+import { NumberInput, Select, TextInput } from "@/components/Forms/Inputs"
+import { Label } from "@/components/Forms/Label"
 import { Form, Formik } from "formik"
 import { redirect } from "next/navigation"
 import * as Yup from "yup"
@@ -35,9 +37,9 @@ export default function SubscriptionPlanForm() {
         description: "",
         rate: "",
         rateIncrease: "",
-        billingFrequency: "",
-        isShareDependent: false,
-        isProductionDependent: false,
+        billingFrequency: "default",
+        isShareDependent: "default",
+        isProductionDependent: "default",
       }}
       validationSchema={SubscriptionPlanSchema}
       onSubmit={async (values) => {
@@ -55,7 +57,7 @@ export default function SubscriptionPlanForm() {
     >
       {({ handleChange, errors, touched, dirty }) => (
         <Form className="">
-          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-12 border-gray-900/10 border-b-2">
+          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-4 border-gray-900/10 border-b-2">
             <div>
               <h2 className="font-semibold text-xl mb-2">
                 New Subscription Plan
@@ -68,68 +70,68 @@ export default function SubscriptionPlanForm() {
               </p>
             </div>
 
-            <div className="">
-              <Input label="Plan Name" type="text" name="name" />
+            <Label htmlFor="name">Plan Name</Label>
+            <TextInput type="text" name="name" />
 
-              <Input type="textarea" name="description" label="Description" />
+            <Label htmlFor="description">Description</Label>
+            <TextInput type="textarea" name="description" />
 
-              <Input
-                type="select"
-                label="How often should your subscribers be billed?"
-                name="billingFrequency"
-              >
-                <option value="monthly">Monthly</option>
-                <option value="annually">Annually</option>
-              </Input>
+            <Label htmlFor="billingFrequency">Billing Frequency</Label>
+            <Select name="billingFrequency">
+              <option value="monthly">Monthly</option>
+              <option value="annually">Annually</option>
+            </Select>
 
-              <Input
-                type="select"
-                label="Are subscribers billed proportional to the number of shares they have?"
-                name="isShareDependent"
-                helper="Generally, the answer is yes. In rare cases, you might bill
-                    each subscriber the same amount, regardless of the number of
-                    shares they have."
-              >
-                <option value="true">
-                  Yes, subscribers under this plan will be billed proportional
-                  to how many shares they have.
-                </option>
-                <option value="false">
-                  No, each subscriber gets billed the same.
-                </option>
-              </Input>
+            <Label htmlFor="isShareDependent">
+              Is billing proportional to the number of shares?
+            </Label>
+            <Select name="isShareDependent">
+              <option value="true">
+                Yes, subscribers under this plan will be billed proportional to
+                how many shares they have.
+              </option>
+              <option value="false">
+                No, each subscriber gets billed the same.
+              </option>
+            </Select>
 
-              <Input
-                type="select"
-                name="isProductionDependent"
-                label="Are subscribers billed proportional to the production of the garden?"
-                helper="This one depends on your model. If you answer yes, your
-                  subscribers will be billed based on the value of the latest
-                  production data. Don't worry, we'll remind you to keep your
-                  production data up to date, and we'll never send a bill
-                  without your approval."
-              >
-                <option value="true">
-                  Yes, subscribers under this plan are billed proportional to
-                  the production of their respective garden.
-                </option>
-                <option value="false">
-                  No, billing is not dependent on production.
-                </option>
-              </Input>
+            <Helper>
+              Generally, the answer is yes. In rare cases, you might bill each
+              subscriber the same amount, regardless of the number of shares
+              they have.
+            </Helper>
 
-              <Input label="Rate" name="rate" type="number" step="1" min={0} />
+            <Label htmlFor="isProductionDependent">
+              Is billing proportional to the production of the garden?
+            </Label>
+            <Select type="select" name="isProductionDependent">
+              <option value="true">
+                Yes, subscribers under this plan are billed proportional to the
+                production of their respective garden.
+              </option>
+              <option value="false">
+                No, billing is not dependent on production.
+              </option>
+            </Select>
 
-              <Input
-                label="Annual Rate Increase"
-                type="number"
-                name="annualRateIncrease"
-              />
-            </div>
+            <Helper>
+              This one depends on your model. If you answer yes, your
+              subscribers will be billed based on the value of the latest
+              production data. Don't worry, we'll remind you to keep your
+              production data up to date, and we'll never send a bill without
+              your approval.
+            </Helper>
+
+            <Label htmlFor="rate">Rate</Label>
+            <NumberInput name="rate" step={0.1} min={0} />
+
+            <Label htmlFor="annualRateIncrease">Annual Rate Increase</Label>
+
+            <NumberInput name="annualRateIncrease" />
           </div>
 
           <div className="flex justify-center">
-            <button className="btn my-8" type="submit">
+            <button className="btn  btn-primary my-8" type="submit">
               Submit
             </button>
           </div>

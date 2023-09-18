@@ -63,7 +63,7 @@ model VerificationToken {
 model Garden {
   id          String       @id @default(cuid())
   name        String
-  capacityDc  Decimal      @default(0)
+  capacityDc  Float        @default(0)
   description String?
   subscribers Subscriber[]
   readings    Reading[]
@@ -77,7 +77,7 @@ model Reading {
   startDate DateTime
   endDate   DateTime
   inputDate DateTime
-  value     Decimal
+  value     Float
 }
 
 model Subscriber {
@@ -85,7 +85,7 @@ model Subscriber {
   stripeCustomerId   String?
   name               String
   email              String
-  allocation         Decimal           @default(0)
+  allocation         Float             @default(0)
   gardenId           String            @default("1")
   garden             Garden            @relation(fields: [gardenId], references: [id])
   SubscriptionPlan   SubscriptionPlan? @relation(fields: [subscriptionPlanId], references: [id])
@@ -111,8 +111,8 @@ model SubscriptionPlan {
   billingFrequency      String
   isShareDependent      Boolean
   isProductionDependent Boolean
-  rate                  Decimal
-  rateIncrease          Decimal
+  rate                  Float
+  rateIncrease          Float
   subscribers           Subscriber[]
   BillingJob            BillingJob[]
 }

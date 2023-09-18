@@ -1,10 +1,13 @@
 "use client"
 
 import DeleteButton from "@/components/DeleteButton"
-import { Input } from "@/components/forms"
+import {
+  DateInput,
+  DateRangeInput,
+  NumberInput,
+} from "@/components/Forms/Inputs"
 import { Reading } from "@/types"
 import { Form, Formik } from "formik"
-import { Edit, Trash } from "lucide-react"
 import { revalidateTag } from "next/cache"
 import * as Yup from "yup"
 
@@ -12,8 +15,7 @@ const validationSchema = Yup.object({
   value: Yup.number()
     .min(0, "Value must be greater than 0.")
     .required("Required"),
-  startDate: Yup.date().required("Required"),
-  endDate: Yup.date().required("Required"),
+  dates: Yup.date().required("Required"),
 })
 
 export default function ReadingForm({
@@ -29,11 +31,11 @@ export default function ReadingForm({
       validationSchema={validationSchema}
       initialValues={{
         value: "",
-        startDate: "",
-        endDate: "",
+        dates: "",
       }}
       onSubmit={async (values, { resetForm }) => {
-        console.log(values)
+        // console.log(values)
+        return
         const res = await fetch("/api/reading", {
           method: "POST",
           headers: {
@@ -45,12 +47,9 @@ export default function ReadingForm({
             gardenId,
           }),
         })
-        console.log(res)
         if (res.ok) {
           resetForm()
           revalidateTag(gardenId)
-
-          console.log(resetForm)
         }
       }}
     >
@@ -99,16 +98,16 @@ export default function ReadingForm({
             <tfoot>
               <tr>
                 <td>
-                  <Input type="number" name="value" />
+                  <NumberInput name="value" min={0} />
                 </td>
                 <td>
-                  <Input type="date" name="startDate" />
+                  <DateInput name="startDate" />
                 </td>
                 <td>
-                  <Input type="date" name="endDate" />
+                  <DateInput name="endDate" />
                 </td>
                 <td>
-                  <button className="btn" type="submit">
+                  <button className="btn btn-primary" type="submit">
                     Save
                   </button>
                 </td>

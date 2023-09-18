@@ -1,9 +1,11 @@
 "use client"
 
-import { Input } from "@/components/forms"
+import { NumberInput, Select, TextInput } from "@/components/Forms/Inputs"
 import { Garden, SubscriptionPlan } from "@/types"
+import { SelectItem, Select as TremorSelect } from "@tremor/react"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/navigation"
+import React from "react"
 import * as Yup from "yup"
 
 const validationSchema = Yup.object({
@@ -11,7 +13,9 @@ const validationSchema = Yup.object({
     .min(8, "Please enter a name between 8 and 100 characters")
     .max(100, "Please enter a name between 8 and 100 characters")
     .required("Field is required"),
-  email: Yup.string().email("Please enter a valid email address"),
+  email: Yup.string()
+    .email("Please enter a valid email address")
+    .required("Field is required"),
   gardenId: Yup.string().required("Required"),
   allocation: Yup.number()
     .min(0, "Allocation must be positive")
@@ -27,12 +31,12 @@ export default function SubscriberForm({
   gardens: Garden[]
   subscriptionPlans: SubscriptionPlan[]
 }) {
-  console.log(gardens, subscriptionPlans)
   const router = useRouter()
 
   return (
     <Formik
       validateOnChange
+      validateOnBlur
       validationSchema={validationSchema}
       initialValues={{
         name: "",
@@ -42,7 +46,6 @@ export default function SubscriberForm({
         subscriptionPlanId: "",
       }}
       onSubmit={async (values) => {
-        console.log(values)
         const res = await fetch("/api/subscribers", {
           method: "POST",
           body: JSON.stringify(values),
@@ -51,36 +54,64 @@ export default function SubscriberForm({
         if (res.ok) router.push("/subscribers")
       }}
     >
-      {(props) => (
+      {({ errors, touched, values, handleChange }) => (
         <Form>
-          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-12 border-gray-900/10 border-b-2">
+          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 border-gray-900/10 border-b-2">
             <div className="font-semibold text-xl mb-2">
               <h2 className="mb-4 text-2xl">New Subscriber</h2>
             </div>
 
-            <Input type="text" name="name" label="Subscriber Name" />
+            <TextInput
+              name="name"
+              error={errors.name}
+              touched={touched.name}
+              label="Subscriber Name"
+            />
 
-            <Input type="email" name="email" label="Email" />
+            <TextInput
+              type="email"
+              name="email"
+              error={errors.email}
+              touched={touched.email}
+              label="Email"
+            />
 
-            <Input type="select" name={"gardenId"} label="Garden Ownership">
+            <Select
+              name="gardenId"
+              label="Garden Ownership"
+              error={errors.gardenId}
+              touched={touched.gardenId}
+            >
               {gardens.map((garden: Garden) => (
                 <option key={garden.id} value={garden.id}>
                   {garden.name}
                 </option>
               ))}
-            </Input>
+            </Select>
 
-            <Input type="number" name="allocation" label="Allocation (kW)" />
+            <NumberInput
+              name="allocation"
+              label="Allocation (kW)"
+              min={0}
+              step={0.1}
+              error={errors.allocation}
+              touched={touched.allocation}
+            />
 
-            <Input label="Payment Plan" name="subscriptionPlanId" type="select">
+            <Select
+              label="Payment Plan"
+              name="subscriptionPlanId"
+              error={errors.subscriptionPlanId}
+              touched={touched.subscriptionPlanId}
+            >
               {subscriptionPlans.map((plan: SubscriptionPlan) => (
                 <option key={plan.id} value={plan.id}>
                   {plan.name}
                 </option>
               ))}
-            </Input>
+            </Select>
           </div>
-          <button className="btn" type="submit">
+          <button className="btn btn-primary  " type="submit">
             Save
           </button>
         </Form>

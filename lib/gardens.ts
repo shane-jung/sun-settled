@@ -1,19 +1,23 @@
 import { Garden, GardenWithRelations, GardenWithSubscribers } from "@/types"
 import { notFound } from "next/navigation"
+import { cache } from "react"
 
 import { prisma } from "./prisma"
 
-const getAllGardens = async ({
-  include,
-}: {
-  include?: { subscribers?: boolean; readings?: boolean }
-}): Promise<GardenWithRelations[] | GardenWithSubscribers[] | Garden[]> => {
-  const gardens = await prisma.garden.findMany({
-    include: include || {},
-  })
+export const revalidate = 1
+const getAllGardens = cache(
+  async ({
+    include,
+  }: {
+    include: { subscribers?: boolean; readings?: boolean }
+  }): Promise<any> => {
+    const gardens = await prisma.garden.findMany({
+      include: { subscribers: include.subscribers, readings: include.readings },
+    })
 
-  return gardens as GardenWithRelations[]
-}
+    return gardens
+  }
+)
 
 const getGarden = async ({
   id,
@@ -28,7 +32,6 @@ const getGarden = async ({
     },
     include: include || {},
   })
-  console.log(garden)
   if (!garden) return notFound()
 
   return garden

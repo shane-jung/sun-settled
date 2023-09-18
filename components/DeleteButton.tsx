@@ -26,7 +26,7 @@ export default function DeleteButton({
   }
 
   return (
-    <button className="btn-danger  p-2.5" {...restProps} onClick={handleDelete}>
+    <button className="btn-danger p-2.5" {...restProps} onClick={handleDelete}>
       <Trash className=" h-4 w-4" />
       {children}
     </button>

@@ -18,23 +18,34 @@ body {
     background-color: unset;
   }
   .btn {
-    @apply inline-block rounded-md bg-blue-500 px-4 py-2 text-white shadow-md transition hover:bg-blue-600;
+    @apply inline-block rounded-md px-4 py-2 font-medium text-white shadow-md transition;
   }
 
   .btn-outline {
-    @apply inline-block rounded-md border-2 border-blue-500 px-4 py-2 text-blue-500 shadow-md transition hover:bg-blue-500 hover:text-white;
+    @apply btn transition hover:text-white;
+  }
+
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-600;
+  }
+  .btn-primary-outline {
+    @apply btn-outline border-blue-500 text-blue-500 hover:bg-blue-500;
   }
 
   .btn-secondary {
-    @apply inline-block rounded-md !bg-gray-500 px-4 py-2 text-white shadow-md transition hover:!bg-gray-600;
+    @apply btn bg-gray-500 hover:bg-gray-600;
   }
 
   .btn-secondary-outline {
-    @apply inline-block rounded-md border-2 border-gray-500 px-4 py-2 text-gray-500 shadow-md transition hover:bg-gray-500 hover:text-white;
+    @apply btn-outline border-gray-500 text-gray-500 hover:bg-gray-500;
   }
 
   .btn-danger {
-    @apply inline-block rounded-md bg-red-500 px-4 py-2 text-white shadow-md transition hover:bg-red-600;
+    @apply btn rounded-md bg-red-500 hover:bg-red-600;
+  }
+
+  .btn-danger-outline {
+    @apply btn-outline border-red-500 text-red-500 hover:bg-red-500;
   }
   /* .inactive {
     @apply pointer-events-none bg-gray-300 text-gray-700 opacity-50;
@@ -44,7 +55,7 @@ body {
     @apply w-full table-auto;
   }
   tbody {
-    @apply font-light;
+    @apply text-sm text-gray-600;
   }
   td,
   th {
@@ -61,6 +72,6 @@ body {
   }
 
   .panel {
-    @apply rounded-lg border-2 border-gray-200 bg-white p-4 shadow-md;
+    @apply rounded-lg border-2 border-gray-200 bg-white p-6 shadow-md;
   }
 }
