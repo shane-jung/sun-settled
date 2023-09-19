@@ -63,7 +63,7 @@ model VerificationToken {
 model Garden {
   id          String       @id @default(cuid())
   name        String
-  capacityDc  Float        @default(0)
+  capacityDc  Float        @default(0) @map("capacity_dc")
   description String?
   subscribers Subscriber[]
   readings    Reading[]
@@ -72,47 +72,47 @@ model Garden {
 
 model Reading {
   id        String   @id @default(cuid())
-  gardenId  String
+  gardenId  String   @map("garden_id")
   garden    Garden   @relation(fields: [gardenId], references: [id])
-  startDate DateTime
-  endDate   DateTime
-  inputDate DateTime
+  startDate DateTime @map("start_date")
+  endDate   DateTime @map("end_date")
+  inputDate DateTime @map("input_date")
   value     Float
 }
 
 model Subscriber {
   id                 String            @id @default(cuid())
-  stripeCustomerId   String?
+  stripeCustomerId   String?           @map("stripe_customer_id")
   name               String
   email              String
   allocation         Float             @default(0)
-  gardenId           String            @default("1")
+  gardenId           String            @default("1") @map("garden_id")
   garden             Garden            @relation(fields: [gardenId], references: [id])
   SubscriptionPlan   SubscriptionPlan? @relation(fields: [subscriptionPlanId], references: [id])
-  subscriptionPlanId String?
+  subscriptionPlanId String?           @map("subscription_plan_id")
 }
 
 model BillingJob {
-  id                   String           @id @default(cuid())
-  name                 String
-  garden_id            String
-  subscription_plan_id String
-  subscription_plan    SubscriptionPlan @relation(fields: [subscription_plan_id], references: [id])
-  garden               Garden           @relation(fields: [garden_id], references: [id])
-  create_time          DateTime
-  initial_time         DateTime
-  cycles               Int
+  id                 String           @id @default(cuid())
+  name               String
+  gardenId           String           @map("garden_id")
+  subscriptionPlanId String           @map("subscription_plan_id")
+  subscriptionPlan   SubscriptionPlan @relation(fields: [subscriptionPlanId], references: [id])
+  garden             Garden           @relation(fields: [gardenId], references: [id])
+  startDate          DateTime         @map("start_date")
+  endDate            DateTime         @map("end_date")
+  scheduleArn        String           @map("schedule_arn")
 }
 
 model SubscriptionPlan {
   id                    String       @id @default(cuid())
   name                  String
   description           String?
-  billingFrequency      String
-  isShareDependent      Boolean
-  isProductionDependent Boolean
+  billingFrequency      String       @map("billing_frequency")
+  isShareDependent      Boolean      @map("is_share_dependent")
+  isProductionDependent Boolean      @map("is_production_dependent")
   rate                  Float
-  rateIncrease          Float
+  rateIncrease          Float        @map("rate_increase")
   subscribers           Subscriber[]
   BillingJob            BillingJob[]
 }

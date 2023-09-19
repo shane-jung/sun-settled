@@ -8,15 +8,14 @@ export default async function GardenOverviewTable() {
     include: { subscribers: true, readings: true },
   })
   return (
-    <DashboardPanel className="col-span-2 lg:col-span-3 panel">
+    <DashboardPanel className="col-span-1 lg:col-span-5">
       <DashboardPanel.Title>Overview</DashboardPanel.Title>
       <DashboardPanel.Body>
-        <table>
-          <thead className="text-left">
+        <table className="table">
+          <thead>
             <tr>
               <th>Garden Name</th>
               <th>Capacity (kW)</th>
-              <th>Subscribers </th>
               <th></th>
             </tr>
           </thead>
@@ -24,16 +23,12 @@ export default async function GardenOverviewTable() {
             {gardens.map((garden: Garden) => (
               <tr key={garden.id}>
                 <td>
-                  <Link href={`/gardens/${garden.id}`} className="link ">
-                    {garden.name}
-                  </Link>
+                  <Link href={`/gardens/${garden.id}`}>{garden.name}</Link>
                 </td>
                 <td>{garden.capacityDc.toString()}</td>
-                <td>{garden.subscribers.length.toString()}</td>
+                {/* <td>{garden.subscribers.length.toString()}</td> */}
                 <td>
-                  <Link href={`/gardens/${garden.id}`} className="link">
-                    View
-                  </Link>
+                  <Link href={`/gardens/${garden.id}`}>View</Link>
                 </td>
               </tr>
             ))}

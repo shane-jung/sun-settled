@@ -1,108 +1,86 @@
-import { Select as TremorSelectInput } from "@tremor/react"
-import { Datepicker } from "flowbite-react"
 import { Field } from "formik"
+import React from "react"
 
-import ErrorMessage from "./ErrorMessage"
-import { Label } from "./Label"
-import WarningIcon from "./WarningIcon"
-import Wrapper from "./Wrapper"
+export function FormControl({ children }: { children: React.ReactNode }) {
+  let label
+  let input
+  let select
+  React.Children.forEach(children, (child) => {
+    if (!React.isValidElement(child)) return
+    if (child.type === FormControl.Label) label = child
+    else if (child.type === FormControl.Input) input = child
+    else if (child.type === FormControl.Select) select = child
+    else if (child.type === FormControl.Textarea) input = child
+  })
 
-interface InputProps {
-  error?: string
-  touched?: boolean
-  name: string
-  label: string
-  children: React.ReactNode
-}
-function Input({ error, touched, name, label, children }: InputProps) {
   return (
-    <div className="mt-4">
-      <Label htmlFor={name}>{label}</Label>
-      <Wrapper error={Boolean(error != undefined && touched)}>
-        {children}
-        {error && touched && <WarningIcon />}
-      </Wrapper>
-
-      <ErrorMessage show={Boolean(error != undefined && touched)}>
-        {error}
-      </ErrorMessage>
+    <div className="form-control">
+      {label}
+      {input}
+      {select}
     </div>
   )
 }
 
-export function TextInput({ type = "text", name, error, touched, label }: any) {
+FormControl.Label = function FormControlLabel({
+  children,
+  htmlFor,
+}: {
+  children: React.ReactNode
+  htmlFor: string
+}) {
   return (
-    <Input error={error} touched={touched} name={name} label={label}>
-      <Field
-        name={name}
-        id={name}
-        type={type}
-        className="bg-transparent text-sm block w-full p-2.5 border-0 rounded-lg outline-0 focus:ring-0 ring-0"
-      />
-    </Input>
+    <label className="label label-text font-medium" htmlFor={htmlFor}>
+      {children}
+    </label>
   )
 }
 
-export function NumberInput({ name, error, touched, label, ...rest }: any) {
-  return (
-    <Input error={error} touched={touched} name={name} label={label}>
-      <Field
-        name={name}
-        id={name}
-        type="number"
-        className="bg-transparent text-sm block w-full p-2.5 border-0 rounded-lg outline-0 focus:ring-0 ring-0"
-        {...rest}
-      />
-    </Input>
-  )
-}
-
-export function Select(props: any) {
-  const { error, touched, name, label, children } = props
-  return (
-    <Input error={error} touched={touched} name={name} label={label}>
-      <Field
-        name={name}
-        id={name}
-        as={"select"}
-        className="bg-transparent text-sm block w-full p-2.5 border-0 rounded-lg outline-0 focus:ring-0 ring-0"
-      >
-        <option value="" disabled>
-          Select...
-        </option>
-        {children.map((child: any) => (
-          <option key={child.key} value={child.key} className="p-8">
-            {child.props.children}
-          </option>
-        ))}
-      </Field>
-    </Input>
-  )
-}
-
-export function DateInput({ name, error, touched, label, type, ...rest }: any) {
-  return <Field component={Datepicker} name={name} />
-}
-
-export function DateRangeInput({
+FormControl.Select = function FormControlSelect({
   name,
-  error,
-  touched,
-  label,
-  type,
-  ...rest
-}: any) {
-  return <Field component={Datepicker} name={name} />
+  children,
+}: {
+  name: string
+  children?: React.ReactNode
+}) {
+  return (
+    <Field name={name} component={"select"} className="select select-primary">
+      {children}
+    </Field>
+  )
 }
 
-export function TimeInput({
+FormControl.Textarea = function FormControlSelect({
   name,
-  error,
-
-  touched,
-  label,
+}: {
+  name: string
+  children?: React.ReactNode
+}) {
+  return (
+    <Field
+      name={name}
+      component={"texarea"}
+      className="textarea textarea-primary"
+    />
+  )
+}
+FormControl.Input = function FormControlInput({
   type,
+  name,
+  children,
   ...rest
-}: any) {
-  return <Field component={"input"} type="time" name={name} />
+}: {
+  name: string
+  type: string
+  children?: React.ReactNode
+}) {
+  return (
+    <Field
+      name={name}
+      component={"input"}
+      type={type}
+      className="input input-primary"
+      {...rest}
+    />
+  )
 }

@@ -37,4 +37,12 @@ const getGarden = async ({
   return garden
 }
 
-export { getGarden, getAllGardens }
+const createGarden = async (values: any) => {
+  const garden = await prisma.garden.create({
+    data: values,
+  })
+
+  return garden
+}
+
+export { getGarden, getAllGardens, createGarden }

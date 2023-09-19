@@ -14,4 +14,9 @@ const getBillingJob = async ({ id }: { id: string }) => {
   return job
 }
 
-export { getAllBillingJobs, getBillingJob }
+const createBillingJob = async ({ data }: { data: any }) => {
+  const job = await prisma.billingJob.create({ data })
+  return job
+}
+
+export { getAllBillingJobs, getBillingJob, createBillingJob }

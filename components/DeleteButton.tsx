@@ -1,5 +1,5 @@
-import { Trash } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { HiTrash as Trash } from "react-icons/hi2"
 
 export default function DeleteButton({
   children,

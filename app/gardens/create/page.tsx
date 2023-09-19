@@ -1,6 +1,7 @@
 "use client"
 
-import { NumberInput, TextInput } from "@/components/Forms/Inputs"
+import { FormControl } from "@/components/Forms/Inputs"
+import { createGarden } from "@/lib/gardens"
 import { Form, Formik } from "formik"
 import { redirect, useRouter } from "next/navigation"
 import * as Yup from "yup"
@@ -34,30 +35,36 @@ export default function GardenForm() {
           })
 
           if (res.ok) {
-            console.log(res.body)
             router.push("/gardens")
           }
         }}
       >
-        <Form className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 space-y-8 border-gray-900/10 border-b-2">
-          <div>
-            <h2 className="font-semibold text-xl mb-2">Create New Garden</h2>
-            <p className="mt-0 text-gray-600">
-              Use this form to create a new garden. You'll have the opportunity
-              to add subscribers, and production data history later, if you have
-              that information already.
-            </p>
+        <Form>
+          <div className="max-w-4xl mx-auto rounded shadow-lg p-8 ">
+            <div>
+              <h2 className="font-semibold text-xl mb-2">Create New Garden</h2>
+              <p className="mt-0 text-gray-600">
+                Use this form to create a new garden. You'll have the
+                opportunity to add subscribers, and production data history
+                later, if you have that information already.
+              </p>
+            </div>
+
+            <FormControl>
+              <FormControl.Label htmlFor="name">Garden Name</FormControl.Label>
+              <FormControl.Input name="name" type="text" />
+            </FormControl>
+
+            <FormControl>
+              <FormControl.Label htmlFor="capacityDc">
+                Capacity (kW DC)
+              </FormControl.Label>
+              <FormControl.Input name="capacityDc" type="number" />
+            </FormControl>
           </div>
 
-          <TextInput name="name" type="text" />
-          <NumberInput
-            label="Garden Capacity"
-            name="capacityDc"
-            type="number"
-          />
-
           <button className="btn btn-primary" type="submit">
-            Save
+            Create Garden
           </button>
         </Form>
       </Formik>

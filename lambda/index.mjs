@@ -9,6 +9,7 @@ const process = {
       "sk_test_51NbmFXKfK0uztC1o5yznLu7TMn86DI3Zj1d8XhpuIQjaD2ffk5C1bes26WI8z33ah3HJN08WzQ8nkOCKZkPJIAlK00g8jMPKGI",
   },
 }
+
 const stripe = stripeModule(process.env.STRIPE_SECRET_KEY)
 
 const { Pool } = pkg
@@ -17,8 +18,8 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 
 // comment out the following lines before commit
 const event = {
-  gardenId: "clkqw24i10000wcd4oansnm3m",
-  subscriptionPlanId: "clkshsoz6000cwcck93mhsfba",
+  subscriptionPlanId: "clmjmiehm0002wccwladso22i",
+  gardenId: "clmjhoe4p0008wcag1u8si5gv",
 }
 
 // export const handler = async (event) => {
@@ -46,7 +47,7 @@ if (subscriptionPlan.isProductionDependent)
   var reading = // get the last reading
     (
       await pool.query(
-        `SELECT * FROM "Reading" where "gardenId" = $1 ORDER BY timestamp DESC LIMIT 1`,
+        `SELECT * FROM "Reading" where "gardenId" = $1 ORDER BY "endDate" DESC LIMIT 1`,
         [gardenId]
       )
     ).rows[0].value
@@ -61,21 +62,21 @@ subscribers.forEach(async (subscriber) => {
   )
 
   console.log(amount)
+
+  // const invoice = await stripe.invoices.create({
+  //   customer: subscriber.stripeCustomerId,
+  // })
+
+  // const invoiceItem = await stripe.invoiceItems.create({
+  //   customer: subscriber.stripeCustomerId,
+  //   amount,
+  //   invoice: invoice.id,
+  // })
+  // console.log(invoice, invoiceItem)
+
+  // const selectResult2 =
+  //   await sql`SELECT * FROM Subscriber WHERE gardenId = ${gardenId} AND subscriptionPlanId = ${subscriptionPlanId}`
+  // console.log(selectResult2)
 })
-// const invoice = await stripe.invoices.create({
-//   customer: "cus_OOZcAeK6YP80zg",
-// })
-
-// const invoiceItem = await stripe.invoiceItems.create({
-//   customer: "cus_OOZcAeK6YP80zg",
-//   amount: Math.round(reading * 0.09),
-//   invoice: invoice.id,
-// })
-// console.log(invoice, invoiceItem)
-
-// const selectResult2 =
-//   await sql`SELECT * FROM Subscriber WHERE gardenId = ${gardenId} AND subscriptionPlanId = ${subscriptionPlanId}`
-// console.log(selectResult2)
-
 // return response
 // }

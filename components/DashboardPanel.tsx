@@ -1,5 +1,4 @@
 import clsx from "clsx"
-import Link from "next/link"
 import React from "react"
 
 export default function DashboardPanel(props: {
@@ -22,7 +21,12 @@ export default function DashboardPanel(props: {
   })
 
   return (
-    <div className={clsx("panel", props.className)}>
+    <div
+      className={clsx(
+        "card shadow-lg shadow-base-300 bg-base-100 card-body px-6 py-4",
+        props.className
+      )}
+    >
       <div className="flex justify-between mb-2">
         {title}
         {action}
@@ -32,13 +36,13 @@ export default function DashboardPanel(props: {
   )
 }
 
-DashboardPanel.Title = function DashboardPanelAction({
+DashboardPanel.Title = function DashboardPanelTitle({
   children,
   ...restProps
 }: {
   children: React.ReactNode
 }) {
-  return <h3 className="text-xl font-medium">{children} </h3>
+  return <h4 className="card-title">{children} </h4>
 }
 
 DashboardPanel.Action = function DashboardPanelAction({
@@ -48,10 +52,7 @@ DashboardPanel.Action = function DashboardPanelAction({
   children: React.ReactNode
 }) {
   return (
-    <div
-      className="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline"
-      {...restProps}
-    >
+    <div className="btn btn-link" {...restProps}>
       {children}
     </div>
   )

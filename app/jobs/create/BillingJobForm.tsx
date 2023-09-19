@@ -1,8 +1,8 @@
 "use client"
 
 import { FormControl } from "@/components/Forms/Inputs"
+import { Label } from "@/components/Forms/Label"
 import { Garden, SubscriptionPlan } from "@/types"
-import { SelectItem, Select as TremorSelect } from "@tremor/react"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/navigation"
 import React from "react"
@@ -11,72 +11,75 @@ import * as Yup from "yup"
 const validationSchema = Yup.object({
   name: Yup.string()
     .min(8, "Please enter a name between 8 and 100 characters")
+
     .max(100, "Please enter a name between 8 and 100 characters")
     .required("Field is required"),
-  email: Yup.string()
-    .email("Please enter a valid email address")
-    .required("Field is required"),
+  startDate: Yup.date().required("Required"),
+  endDate: Yup.date().required("Required"),
   gardenId: Yup.string().required("Required"),
-  allocation: Yup.number()
-    .min(0, "Allocation must be positive")
-    .max(1000, "Please enter a valid allocation")
-    .required("Field is required"),
   subscriptionPlanId: Yup.string().required("Required"),
 })
 
-export default function SubscriberForm({
+export default function BillingJobForm({
   gardens,
-  subscriptionPlans,
+  plans,
 }: {
   gardens: Garden[]
-  subscriptionPlans: SubscriptionPlan[]
+  plans: SubscriptionPlan[]
 }) {
   const router = useRouter()
-
   return (
     <Formik
       validateOnChange
-      validateOnBlur
       validationSchema={validationSchema}
       initialValues={{
-        name: "",
-        email: "",
+        startDate: "",
+
         gardenId: "",
-        allocation: "",
         subscriptionPlanId: "",
+        endDate: "",
+        name: "",
       }}
       onSubmit={async (values) => {
         console.log(values)
         return
-        const res = await fetch("/api/subscribers", {
+        const res = await fetch("/api/jobs", {
           method: "POST",
           body: JSON.stringify(values),
         })
 
-        if (res.ok) router.push("/subscribers")
+        if (res.ok) {
+          router.push("/billing/jobs")
+        }
       }}
     >
       {({ errors, touched }) => (
         <Form>
-          <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 border-gray-900/10 border-b-2">
-            <div className="font-semibold text-xl mb-2">
-              <h2 className="mb-4 text-2xl">New Subscriber</h2>
+          <div className="max-w-4xl mx-auto bg-base-100 shadow-base-300 rounded shadow-lg py-8 px-8 space-y-4 border-gray-900/10 border-b-2">
+            <div>
+              <h2 className="font-semibold text-xl mb-2">New Billing Job</h2>
             </div>
-
             <FormControl>
               <FormControl.Label htmlFor="name">Name</FormControl.Label>
               <FormControl.Input name="name" type="text" />
             </FormControl>
 
             <FormControl>
-              <FormControl.Label htmlFor="email">Email</FormControl.Label>
-              <FormControl.Input name="email" type="email" />
+              <FormControl.Label htmlFor="startDate">
+                Start Date
+              </FormControl.Label>
+              <FormControl.Input type="date" name="startDate" />
+            </FormControl>
+
+            <FormControl>
+              <FormControl.Label htmlFor="endDate">End Date</FormControl.Label>
+              <FormControl.Input type="date" name="endDate" />
             </FormControl>
 
             <FormControl>
               <FormControl.Label htmlFor="gardenId">Garden</FormControl.Label>
               <FormControl.Select name="gardenId">
-                {gardens.map((garden: Garden) => (
+                {gardens.map((garden) => (
                   <option key={garden.id} value={garden.id}>
                     {garden.name}
                   </option>
@@ -85,19 +88,11 @@ export default function SubscriberForm({
             </FormControl>
 
             <FormControl>
-              <FormControl.Label htmlFor="allocation">
-                Allocation (%)
-              </FormControl.Label>
-              <FormControl.Input name="allocation" type="number" />
-            </FormControl>
-
-            <FormControl>
               <FormControl.Label htmlFor="subscriptionPlanId">
                 Subscription Plan
               </FormControl.Label>
-
               <FormControl.Select name="subscriptionPlanId">
-                {subscriptionPlans.map((plan: SubscriptionPlan) => (
+                {plans.map((plan) => (
                   <option key={plan.id} value={plan.id}>
                     {plan.name}
                   </option>
@@ -105,8 +100,8 @@ export default function SubscriberForm({
               </FormControl.Select>
             </FormControl>
           </div>
-          <button className="btn btn-primary  " type="submit">
-            Save
+          <button className="btn btn-primary mx-auto mt-4 block" type="submit">
+            Create Billing Job
           </button>
         </Form>
       )}

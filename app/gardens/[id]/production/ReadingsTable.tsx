@@ -1,11 +1,7 @@
 "use client"
 
 import DeleteButton from "@/components/DeleteButton"
-import {
-  DateInput,
-  DateRangeInput,
-  NumberInput,
-} from "@/components/Forms/Inputs"
+import { FormControl } from "@/components/Forms/Inputs"
 import { Reading } from "@/types"
 import { Form, Formik } from "formik"
 import { revalidateTag } from "next/cache"
@@ -31,7 +27,8 @@ export default function ReadingForm({
       validationSchema={validationSchema}
       initialValues={{
         value: "",
-        dates: "",
+        startDate: "",
+        endDate: "",
       }}
       onSubmit={async (values, { resetForm }) => {
         // console.log(values)
@@ -55,7 +52,7 @@ export default function ReadingForm({
     >
       {({ values, errors, touched, dirty }) => (
         <Form>
-          <table>
+          <table className="table">
             <thead>
               <tr>
                 <th>Reading (kWh)</th>
@@ -98,13 +95,22 @@ export default function ReadingForm({
             <tfoot>
               <tr>
                 <td>
-                  <NumberInput name="value" min={0} />
+                  <FormControl.Input
+                    name="value"
+                    type="number"
+                  ></FormControl.Input>
                 </td>
                 <td>
-                  <DateInput name="startDate" />
+                  <FormControl.Input
+                    name="startDate"
+                    type="date"
+                  ></FormControl.Input>
                 </td>
                 <td>
-                  <DateInput name="endDate" />
+                  <FormControl.Input
+                    name="endDate"
+                    type="date"
+                  ></FormControl.Input>
                 </td>
                 <td>
                   <button className="btn btn-primary" type="submit">
