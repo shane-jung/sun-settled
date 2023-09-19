@@ -2,7 +2,6 @@
 
 import { FormControl } from "@/components/Forms/Inputs"
 import { Garden, SubscriptionPlan } from "@/types"
-import { SelectItem, Select as TremorSelect } from "@tremor/react"
 import { Form, Formik } from "formik"
 import { useRouter } from "next/navigation"
 import React from "react"
