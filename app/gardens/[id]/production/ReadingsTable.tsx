@@ -4,14 +4,14 @@ import DeleteButton from "@/components/DeleteButton"
 import { FormControl } from "@/components/Forms/Inputs"
 import { Reading } from "@/types"
 import { Form, Formik } from "formik"
-import { revalidateTag } from "next/cache"
 import * as Yup from "yup"
 
 const validationSchema = Yup.object({
   value: Yup.number()
     .min(0, "Value must be greater than 0.")
     .required("Required"),
-  dates: Yup.date().required("Required"),
+  startDate: Yup.date().required("Required"),
+  endDate: Yup.date().required("Required"),
 })
 
 export default function ReadingForm({
@@ -31,8 +31,7 @@ export default function ReadingForm({
         endDate: "",
       }}
       onSubmit={async (values, { resetForm }) => {
-        // console.log(values)
-        return
+        console.log(values)
         const res = await fetch("/api/reading", {
           method: "POST",
           headers: {
@@ -46,11 +45,10 @@ export default function ReadingForm({
         })
         if (res.ok) {
           resetForm()
-          revalidateTag(gardenId)
         }
       }}
     >
-      {({ values, errors, touched, dirty }) => (
+      {() => (
         <Form>
           <table className="table">
             <thead>

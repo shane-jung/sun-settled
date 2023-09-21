@@ -7,8 +7,32 @@ module.exports = {
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
   ],
   plugins: [require("@tailwindcss/typography"), require("daisyui")],
+  extend: {
+    theme: {
+      fontFamily: {
+        sans: ["Inter", require("tailwindcss/defaultTheme").fontFamily.sans],
+      },
+    },
+  },
   daisyui: {
-    themes: ["pastel", "synthwave", "emerald"],
+    themes: [
+      {
+        mytheme: {
+          "primary": "#3498db", // Sky blue
+          "secondary": "#f39c12", // Vibrant orange
+          "accent": "#ff6b81", // Coral pink
+          "neutral": "#95a5a6", // Light gray
+          "base-100": "#ecf0f1", // Off-white
+          "info": "#5bc0de", // Sky blue
+          "success": "#2ecc71", // Fresh green
+          "warning": "#f1c40f", // Sunny yellow
+          "error": "#e74c3c", // Fiery red
+        },
+      },
+      "emerald",
+      "pastel",
+      "synthwave",
+    ],
   },
   theme: {
     transparent: "transparent",

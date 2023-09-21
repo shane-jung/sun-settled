@@ -23,7 +23,7 @@ export default function DashboardPanel(props: {
   return (
     <div
       className={clsx(
-        "card shadow-lg shadow-base-300 bg-base-100 card-body px-6 py-4",
+        "card shadow-lg shadow-base-300 bg-base-100 card-body px-6 py-4 text-slate-700",
         props.className
       )}
     >
@@ -65,7 +65,7 @@ DashboardPanel.Body = function DashboardPanelBody({
   children: React.ReactNode
 }) {
   return (
-    <div className="" {...restProps}>
+    <div className="text-slate-500" {...restProps}>
       {children}
     </div>
   )

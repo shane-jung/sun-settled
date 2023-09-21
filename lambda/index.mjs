@@ -18,8 +18,8 @@ const pool = new Pool({ connectionString: process.env.DATABASE_URL })
 
 // comment out the following lines before commit
 const event = {
-  subscriptionPlanId: "clmjmiehm0002wccwladso22i",
-  gardenId: "clmjhoe4p0008wcag1u8si5gv",
+  subscriptionPlanId: "clmtoig1x0004wcjglvp0knsh",
+  gardenId: "clmquth9w0000k70fva0zdijo",
 }
 
 // export const handler = async (event) => {
@@ -28,7 +28,7 @@ const { gardenId, subscriptionPlanId } = event
 
 const subscribers = (
   await pool.query(
-    'SELECT * FROM "Subscriber" where "gardenId" = $1 AND "subscriptionPlanId" = $2',
+    'SELECT * FROM "Subscriber" where garden_id = $1 AND subscription_plan_id = $2',
     [gardenId, subscriptionPlanId]
   )
 ).rows
@@ -43,11 +43,11 @@ const subscriptionPlan = (
 
 console.log(subscriptionPlan)
 
-if (subscriptionPlan.isProductionDependent)
+if (subscriptionPlan.is_production_dependent)
   var reading = // get the last reading
     (
       await pool.query(
-        `SELECT * FROM "Reading" where "gardenId" = $1 ORDER BY "endDate" DESC LIMIT 1`,
+        `SELECT * FROM "Reading" where garden_id = $1 ORDER BY end_date DESC LIMIT 1`,
         [gardenId]
       )
     ).rows[0].value
@@ -58,25 +58,21 @@ subscribers.forEach(async (subscriber) => {
   const amount = Math.round(
     (reading ? reading : 1) *
       subscriptionPlan.rate *
-      (subscriptionPlan.isShareDependent ? subscriber.allocation : 1)
+      (subscriptionPlan.is_share_dependent ? subscriber.allocation : 1)
   )
 
   console.log(amount)
 
-  // const invoice = await stripe.invoices.create({
-  //   customer: subscriber.stripeCustomerId,
-  // })
+  const invoice = await stripe.invoices.create({
+    customer: subscriber.stripe_customer_id,
+  })
 
-  // const invoiceItem = await stripe.invoiceItems.create({
-  //   customer: subscriber.stripeCustomerId,
-  //   amount,
-  //   invoice: invoice.id,
-  // })
-  // console.log(invoice, invoiceItem)
-
-  // const selectResult2 =
-  //   await sql`SELECT * FROM Subscriber WHERE gardenId = ${gardenId} AND subscriptionPlanId = ${subscriptionPlanId}`
-  // console.log(selectResult2)
+  const invoiceItem = await stripe.invoiceItems.create({
+    customer: subscriber.stripe_customer_id,
+    amount,
+    invoice: invoice.id,
+  })
+  console.log(invoice, invoiceItem)
 })
 // return response
 // }

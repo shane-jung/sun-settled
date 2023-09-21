@@ -45,8 +45,6 @@ export default function SubscriberForm({
         subscriptionPlanId: "",
       }}
       onSubmit={async (values) => {
-        console.log(values)
-        return
         const res = await fetch("/api/subscribers", {
           method: "POST",
           body: JSON.stringify(values),
@@ -55,7 +53,7 @@ export default function SubscriberForm({
         if (res.ok) router.push("/subscribers")
       }}
     >
-      {({ errors, touched }) => (
+      {({ errors, touched, handleChange }) => (
         <Form>
           <div className="max-w-4xl mx-auto bg-white rounded shadow-lg py-8 px-8 border-gray-900/10 border-b-2">
             <div className="font-semibold text-xl mb-2">
@@ -74,7 +72,7 @@ export default function SubscriberForm({
 
             <FormControl>
               <FormControl.Label htmlFor="gardenId">Garden</FormControl.Label>
-              <FormControl.Select name="gardenId">
+              <FormControl.Select name="gardenId" onChange={handleChange}>
                 {gardens.map((garden: Garden) => (
                   <option key={garden.id} value={garden.id}>
                     {garden.name}
@@ -85,7 +83,7 @@ export default function SubscriberForm({
 
             <FormControl>
               <FormControl.Label htmlFor="allocation">
-                Allocation (%)
+                Allocation (kW DC)
               </FormControl.Label>
               <FormControl.Input name="allocation" type="number" />
             </FormControl>
@@ -95,7 +93,10 @@ export default function SubscriberForm({
                 Subscription Plan
               </FormControl.Label>
 
-              <FormControl.Select name="subscriptionPlanId">
+              <FormControl.Select
+                name="subscriptionPlanId"
+                onChange={handleChange}
+              >
                 {subscriptionPlans.map((plan: SubscriptionPlan) => (
                   <option key={plan.id} value={plan.id}>
                     {plan.name}

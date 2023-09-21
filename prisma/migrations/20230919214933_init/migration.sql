@@ -51,8 +51,7 @@ CREATE TABLE "VerificationToken" (
 CREATE TABLE "Garden" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "slug" TEXT NOT NULL,
-    "capacityDc" DECIMAL(65,30) NOT NULL DEFAULT 0,
+    "capacity_dc" DOUBLE PRECISION NOT NULL DEFAULT 0,
     "description" TEXT,
 
     CONSTRAINT "Garden_pkey" PRIMARY KEY ("id")
@@ -61,9 +60,11 @@ CREATE TABLE "Garden" (
 -- CreateTable
 CREATE TABLE "Reading" (
     "id" TEXT NOT NULL,
-    "gardenId" TEXT NOT NULL DEFAULT '1',
-    "timestamp" TIMESTAMP(3) NOT NULL,
-    "value" DECIMAL(65,30) NOT NULL,
+    "garden_id" TEXT NOT NULL,
+    "start_date" TIMESTAMP(3) NOT NULL,
+    "end_date" TIMESTAMP(3) NOT NULL,
+    "input_date" TIMESTAMP(3) NOT NULL,
+    "value" DOUBLE PRECISION NOT NULL,
 
     CONSTRAINT "Reading_pkey" PRIMARY KEY ("id")
 );
@@ -71,13 +72,41 @@ CREATE TABLE "Reading" (
 -- CreateTable
 CREATE TABLE "Subscriber" (
     "id" TEXT NOT NULL,
+    "stripe_customer_id" TEXT,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "allocation" DECIMAL(65,30) NOT NULL DEFAULT 0,
-    "paymentPlan" TEXT NOT NULL DEFAULT 'PAYG',
-    "gardenId" TEXT NOT NULL DEFAULT '1',
+    "allocation" DOUBLE PRECISION NOT NULL DEFAULT 0,
+    "garden_id" TEXT NOT NULL DEFAULT '1',
+    "subscription_plan_id" TEXT,
 
     CONSTRAINT "Subscriber_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "BillingJob" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "garden_id" TEXT NOT NULL,
+    "subscription_plan_id" TEXT NOT NULL,
+    "start_date" TIMESTAMP(3) NOT NULL,
+    "end_date" TIMESTAMP(3) NOT NULL,
+    "schedule_arn" TEXT NOT NULL,
+
+    CONSTRAINT "BillingJob_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "SubscriptionPlan" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "billing_frequency" TEXT NOT NULL,
+    "is_share_dependent" BOOLEAN NOT NULL,
+    "is_production_dependent" BOOLEAN NOT NULL,
+    "rate" DOUBLE PRECISION NOT NULL,
+    "rate_increase" DOUBLE PRECISION NOT NULL,
+
+    CONSTRAINT "SubscriptionPlan_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -95,9 +124,6 @@ CREATE UNIQUE INDEX "VerificationToken_token_key" ON "VerificationToken"("token"
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationToken_identifier_token_key" ON "VerificationToken"("identifier", "token");
 
--- CreateIndex
-CREATE UNIQUE INDEX "Garden_slug_key" ON "Garden"("slug");
-
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -105,7 +131,16 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Reading" ADD CONSTRAINT "Reading_gardenId_fkey" FOREIGN KEY ("gardenId") REFERENCES "Garden"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Reading" ADD CONSTRAINT "Reading_garden_id_fkey" FOREIGN KEY ("garden_id") REFERENCES "Garden"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Subscriber" ADD CONSTRAINT "Subscriber_gardenId_fkey" FOREIGN KEY ("gardenId") REFERENCES "Garden"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Subscriber" ADD CONSTRAINT "Subscriber_garden_id_fkey" FOREIGN KEY ("garden_id") REFERENCES "Garden"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Subscriber" ADD CONSTRAINT "Subscriber_subscription_plan_id_fkey" FOREIGN KEY ("subscription_plan_id") REFERENCES "SubscriptionPlan"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BillingJob" ADD CONSTRAINT "BillingJob_subscription_plan_id_fkey" FOREIGN KEY ("subscription_plan_id") REFERENCES "SubscriptionPlan"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "BillingJob" ADD CONSTRAINT "BillingJob_garden_id_fkey" FOREIGN KEY ("garden_id") REFERENCES "Garden"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

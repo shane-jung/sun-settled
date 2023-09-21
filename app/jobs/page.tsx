@@ -6,7 +6,7 @@ import Link from "next/link"
 export default async function Page() {
   const jobs = await getAllBillingJobs()
   const schedules = await getAllSchedules({ state: "ENABLED" })
-  console.log(schedules)
+  console.log(jobs)
 
   return (
     <div>
@@ -47,6 +47,7 @@ export default async function Page() {
                 ))}
               </tbody>
             </table>
+            {!jobs.length && <p className="text-center py-8">No jobs found.</p>}
           </DashboardPanel.Body>
         </DashboardPanel>
       </div>

@@ -31,17 +31,17 @@ const SubscriptionPlanSchema = Yup.object().shape({
 export default function SubscriptionPlanForm() {
   return (
     <Formik
+      validationSchema={SubscriptionPlanSchema}
       validateOnChange={true}
       initialValues={{
         name: "",
         description: "",
         rate: "",
         rateIncrease: "",
-        billingFrequency: "default",
-        isShareDependent: "default",
-        isProductionDependent: "default",
+        billingFrequency: "",
+        isShareDependent: "",
+        isProductionDependent: "",
       }}
-      validationSchema={SubscriptionPlanSchema}
       onSubmit={async (values) => {
         const res = await fetch("/api/plans", {
           method: "POST",
@@ -55,9 +55,9 @@ export default function SubscriptionPlanForm() {
         }
       }}
     >
-      {({ errors, touched }) => (
+      {({ errors, touched, handleChange }) => (
         <Form className="">
-          <div className="max-w-4xl mx-auto rounded shadow-lg p-8 ">
+          <div className="max-w-4xl mx-auto rounded shadow-lg p-8 space-y-4 ">
             <div>
               <h2 className="font-semibold text-xl mb-2">
                 New Subscription Plan
@@ -86,7 +86,10 @@ export default function SubscriptionPlanForm() {
               <FormControl.Label htmlFor="billingFrequency">
                 Billing Frequency
               </FormControl.Label>
-              <FormControl.Select name="billingFrequency">
+              <FormControl.Select
+                name="billingFrequency"
+                onChange={handleChange}
+              >
                 <option value="monthly">Monthly</option>
                 <option value="annually">Annually</option>
               </FormControl.Select>
@@ -96,7 +99,10 @@ export default function SubscriptionPlanForm() {
               <FormControl.Label htmlFor="isShareDependent">
                 Is billing proportional to the number of shares?
               </FormControl.Label>
-              <FormControl.Select name="isShareDependent">
+              <FormControl.Select
+                name="isShareDependent"
+                onChange={handleChange}
+              >
                 <option value="true">
                   Yes, subscribers under this plan will be billed proportional
                   to how many shares they have.
@@ -116,7 +122,10 @@ export default function SubscriptionPlanForm() {
               <FormControl.Label htmlFor="isProductionDependent">
                 Is billing proportional to the production of the garden?
               </FormControl.Label>
-              <FormControl.Select name="isProductionDependent">
+              <FormControl.Select
+                name="isProductionDependent"
+                onChange={handleChange}
+              >
                 <option value="true">
                   Yes, subscribers under this plan are billed proportional to
                   the production of their respective garden.

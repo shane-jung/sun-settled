@@ -53,7 +53,7 @@ export default async function Page() {
         <GardenTasks />
         <GardenOverviewTable />
 
-        <DashboardPanel className="col-span-1 lg:col-span-12">
+        <DashboardPanel className="col-span-1 lg:col-span-8">
           <DashboardPanel.Title>Production</DashboardPanel.Title>
           <DashboardPanel.Body>
             <GardenProduction

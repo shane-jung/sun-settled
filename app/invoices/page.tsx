@@ -33,7 +33,7 @@ export default async function Page() {
                       </Link>
                     </td>
                     <td>{invoice.customer_name}</td>
-                    <td>${invoice.amount_due / 100}</td>
+                    <td>${(invoice.amount_due / 100).toFixed(2)}</td>
                     <td>{invoice.status}</td>
                     <td>
                       <a href={`/invoices/${invoice.id.split("_")[1]}`}>

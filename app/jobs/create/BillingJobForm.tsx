@@ -41,8 +41,6 @@ export default function BillingJobForm({
         name: "",
       }}
       onSubmit={async (values) => {
-        console.log(values)
-        return
         const res = await fetch("/api/jobs", {
           method: "POST",
           body: JSON.stringify(values),
@@ -53,7 +51,7 @@ export default function BillingJobForm({
         }
       }}
     >
-      {({ errors, touched }) => (
+      {({ errors, touched, handleChange }) => (
         <Form>
           <div className="max-w-4xl mx-auto bg-base-100 shadow-base-300 rounded shadow-lg py-8 px-8 space-y-4 border-gray-900/10 border-b-2">
             <div>
@@ -78,7 +76,7 @@ export default function BillingJobForm({
 
             <FormControl>
               <FormControl.Label htmlFor="gardenId">Garden</FormControl.Label>
-              <FormControl.Select name="gardenId">
+              <FormControl.Select name="gardenId" onChange={handleChange}>
                 {gardens.map((garden) => (
                   <option key={garden.id} value={garden.id}>
                     {garden.name}
@@ -91,7 +89,10 @@ export default function BillingJobForm({
               <FormControl.Label htmlFor="subscriptionPlanId">
                 Subscription Plan
               </FormControl.Label>
-              <FormControl.Select name="subscriptionPlanId">
+              <FormControl.Select
+                name="subscriptionPlanId"
+                onChange={handleChange}
+              >
                 {plans.map((plan) => (
                   <option key={plan.id} value={plan.id}>
                     {plan.name}

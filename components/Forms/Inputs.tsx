@@ -38,13 +38,24 @@ FormControl.Label = function FormControlLabel({
 
 FormControl.Select = function FormControlSelect({
   name,
+  onChange,
   children,
 }: {
   name: string
+  onChange: (val: string, name: string) => void
   children?: React.ReactNode
 }) {
   return (
-    <Field name={name} component={"select"} className="select select-primary">
+    <Field
+      id={name}
+      name={name}
+      component={"select"}
+      className="select select-bordered"
+      onChange={onChange}
+    >
+      <option value="" disabled>
+        Select an option
+      </option>
       {children}
     </Field>
   )
@@ -58,9 +69,10 @@ FormControl.Textarea = function FormControlSelect({
 }) {
   return (
     <Field
+      id={name}
       name={name}
-      component={"texarea"}
-      className="textarea textarea-primary"
+      component={"textarea"}
+      className="textarea textarea-bordered"
     />
   )
 }
@@ -76,10 +88,11 @@ FormControl.Input = function FormControlInput({
 }) {
   return (
     <Field
+      id={name}
       name={name}
       component={"input"}
       type={type}
-      className="input input-primary"
+      className="input input-bordered"
       {...rest}
     />
   )
